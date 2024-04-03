@@ -10233,24 +10233,23 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\migue\\.nuget\\packages\\": {},
-    "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
+    "C:\\Users\\WK-06\\.nuget\\packages\\": {},
+    "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\migue\\Documents\\PROJECTS\\ccytet\\ccytet.Server\\ccytet.Server.csproj",
+      "projectUniqueName": "C:\\Users\\WK-06\\Documents\\PROJECTS\\ccytet-content-manager\\ccytet.Server\\ccytet.Server.csproj",
       "projectName": "ccytet.Server",
-      "projectPath": "C:\\Users\\migue\\Documents\\PROJECTS\\ccytet\\ccytet.Server\\ccytet.Server.csproj",
-      "packagesPath": "C:\\Users\\migue\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\migue\\Documents\\PROJECTS\\ccytet\\ccytet.Server\\obj\\",
+      "projectPath": "C:\\Users\\WK-06\\Documents\\PROJECTS\\ccytet-content-manager\\ccytet.Server\\ccytet.Server.csproj",
+      "packagesPath": "C:\\Users\\WK-06\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\WK-06\\Documents\\PROJECTS\\ccytet-content-manager\\ccytet.Server\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
-        "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
       ],
       "configFilePaths": [
-        "C:\\Users\\migue\\AppData\\Roaming\\NuGet\\NuGet.Config",
-        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+        "C:\\Users\\WK-06\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -10270,11 +10269,6 @@
         "warnAsError": [
           "NU1605"
         ]
-      },
-      "restoreAuditProperties": {
-        "enableAudit": "true",
-        "auditLevel": "low",
-        "auditMode": "direct"
       }
     },
     "frameworks": {
@@ -10343,7 +10337,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.200\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.203\\RuntimeIdentifierGraph.json"
       }
     }
   }
