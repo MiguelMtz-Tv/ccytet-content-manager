@@ -1,0 +1,33 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.9.34622.214
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ccytet.Server", "ccytet.Server\ccytet.Server.csproj", "{172B3EA6-CB85-484D-878A-B12B2C92B796}"
+EndProject
+Project("{54A90642-561A-4BB1-A94E-469ADEE60C69}") = "ccytet.client", "ccytet.client\ccytet.client.esproj", "{5B839844-91D0-47CB-8FB3-494096521F75}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{172B3EA6-CB85-484D-878A-B12B2C92B796}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{172B3EA6-CB85-484D-878A-B12B2C92B796}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{172B3EA6-CB85-484D-878A-B12B2C92B796}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{172B3EA6-CB85-484D-878A-B12B2C92B796}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5B839844-91D0-47CB-8FB3-494096521F75}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5B839844-91D0-47CB-8FB3-494096521F75}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5B839844-91D0-47CB-8FB3-494096521F75}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{5B839844-91D0-47CB-8FB3-494096521F75}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5B839844-91D0-47CB-8FB3-494096521F75}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5B839844-91D0-47CB-8FB3-494096521F75}.Release|Any CPU.Deploy.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {8EF76811-AF8A-4EC5-A9F9-B36B5B3D4F24}
+	EndGlobalSection
+EndGlobal
