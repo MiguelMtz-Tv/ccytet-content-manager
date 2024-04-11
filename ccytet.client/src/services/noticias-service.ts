@@ -10,4 +10,9 @@ export class NoticiasService {
     public create(data : any){
         return axios.post<any>(this.baseUrl + 'api/noticias/create', data, Sessions.header())
     }
+
+    public dataSource(varArgs : any)
+    {
+        return axios.post<any>(this.baseUrl + 'api/noticias/dataSource', varArgs, Sessions.header())
+    }
 }

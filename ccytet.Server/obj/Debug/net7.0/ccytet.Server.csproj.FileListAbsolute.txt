@@ -214,3 +214,6 @@ C:\Users\WK-06\Documents\PROJECTS\ccytet-content-manager\ccytet.Server\obj\Debug
 C:\Users\WK-06\Documents\PROJECTS\ccytet-content-manager\ccytet.Server\obj\Debug\net7.0\ccytet.Server.pdb
 C:\Users\WK-06\Documents\PROJECTS\ccytet-content-manager\ccytet.Server\obj\Debug\net7.0\ccytet.Server.genruntimeconfig.cache
 C:\Users\WK-06\Documents\PROJECTS\ccytet-content-manager\ccytet.Server\obj\Debug\net7.0\ref\ccytet.Server.dll
+c:\Users\migue\Documents\PROJECTS\ccytet\ccytet.Server\obj\Debug\net7.0\ccytet.Server.sourcelink.json
+C:\Users\migue\Documents\PROJECTS\ccytet\ccytet.Server\bin\Debug\net7.0\AutoMapper.dll
+C:\Users\migue\Documents\PROJECTS\ccytet\ccytet.Server\bin\Debug\net7.0\AutoMapper.Extensions.Microsoft.DependencyInjection.dll

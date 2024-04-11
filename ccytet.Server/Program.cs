@@ -7,10 +7,17 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using ccytet.Server.Tokens;
+using AutoMapper;
+using ccytet.Server.Utils;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+// Add services to the container.}// AutoMapper Service
+builder.Services.AddAutoMapper(typeof(Program));
+var mapperConfig = new MapperConfiguration(m =>
+{
+    m.AddProfile(new MappingProfile());
+});
 
 //inject jwt authentication
 builder.Services.AddAuthentication(options =>

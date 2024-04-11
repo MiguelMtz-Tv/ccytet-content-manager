@@ -1,10 +1,14 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using ccytet.Server.Data;
 using ccytet.Server.Models;
+using ccytet.Server.ViewModels;
 using ccytet.Server.ViewModels.Req.Noticias;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
@@ -15,9 +19,11 @@ namespace ccytet.Server.Services
     public class NoticiasService
     {
         private readonly DataContext _context;
-        public NoticiasService(DataContext context)
+        private readonly IMapper _mapper;
+        public NoticiasService(DataContext context, IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
 
         public async Task Store(ClaimsPrincipal user, CreateNoticiaReq.Root data)
@@ -31,7 +37,7 @@ namespace ccytet.Server.Services
             {
                 IdNoticia = Guid.NewGuid().ToString(),
                 Titulo = data.titulo,
-                Autor = data.autor,
+                Autor = !String.IsNullOrEmpty(data.autor) ? data.autor : "Autor anonimo",
                 FechaCreacion = DateTime.Now,
                 FechaActualizacion = DateTime.Now,
                 Texto = data.body,
@@ -66,6 +72,37 @@ namespace ccytet.Server.Services
             await _context.Noticias.AddAsync(objNoticia);
             await _context.SaveChangesAsync();
             await loginTransaction.CommitAsync();
+        }
+
+        public async Task<dynamic> DataSource(dynamic data)
+        {
+            IQueryable<NoticiaViewModel> lstData = DataSourceExpression();
+
+            DataSourceBuilder<NoticiaViewModel> objDataSourceBuilder = new DataSourceBuilder<NoticiaViewModel>(data, lstData);
+            var objDataBuilder = await objDataSourceBuilder.build();
+
+            // CONSTRUCCION RETORNO DE DATOS
+            List<NoticiaViewModel> lstOriginal = objDataBuilder.rows;
+
+            var objResult = new
+            {
+                rows    = lstOriginal,
+                count   = objDataBuilder.count,
+                length  = objDataBuilder.length,
+                pages   = objDataBuilder.pages,
+                page    = objDataBuilder.page,
+            };
+
+            return objResult;
+        }
+
+        public IQueryable<NoticiaViewModel> DataSourceExpression()
+        {
+            IQueryable<NoticiaViewModel> query;
+            IQueryable<Noticia> rows = _context.Noticias.AsNoTracking().OrderBy(x => x.FechaCreacion).Where(x => !x.Eliminado);
+
+            query = rows.ProjectTo<NoticiaViewModel>(_mapper.ConfigurationProvider);
+            return query;
         }
     }
 }

@@ -38,5 +38,27 @@ namespace ccytet.Server.Controllers
 
             return objReturn.build();
         }
+
+        [Authorize(AuthenticationSchemes = "Bearer")]
+        [HttpPost("DataSource")]
+        public async Task<ActionResult<dynamic>> DataSource([FromBody] JsonObject data)
+        {
+            JsonReturn objReturn = new();
+            try
+            {
+                objReturn.Result = await _noticiasService.DataSource(Globals.JsonData(data));
+                objReturn.Success(SuccessMessage.REQUEST);
+            }
+            catch(AppException ex)
+            {
+                objReturn.Exception(ex);
+            }
+            catch (Exception ex)
+            {
+                objReturn.Exception(ExceptionMessage.RawException(ex));
+            }
+
+            return objReturn.build();
+        }  
     }
 }

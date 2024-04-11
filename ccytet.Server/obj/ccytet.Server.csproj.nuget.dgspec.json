@@ -1,23 +1,24 @@
 {
   "format": 1,
   "restore": {
-    "c:\\Users\\WK-06\\Documents\\PROJECTS\\ccytet-content-manager\\ccytet.Server\\ccytet.Server.csproj": {}
+    "c:\\Users\\migue\\Documents\\PROJECTS\\ccytet\\ccytet.Server\\ccytet.Server.csproj": {}
   },
   "projects": {
-    "c:\\Users\\WK-06\\Documents\\PROJECTS\\ccytet-content-manager\\ccytet.Server\\ccytet.Server.csproj": {
+    "c:\\Users\\migue\\Documents\\PROJECTS\\ccytet\\ccytet.Server\\ccytet.Server.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "c:\\Users\\WK-06\\Documents\\PROJECTS\\ccytet-content-manager\\ccytet.Server\\ccytet.Server.csproj",
+        "projectUniqueName": "c:\\Users\\migue\\Documents\\PROJECTS\\ccytet\\ccytet.Server\\ccytet.Server.csproj",
         "projectName": "ccytet.Server",
-        "projectPath": "c:\\Users\\WK-06\\Documents\\PROJECTS\\ccytet-content-manager\\ccytet.Server\\ccytet.Server.csproj",
-        "packagesPath": "C:\\Users\\WK-06\\.nuget\\packages\\",
-        "outputPath": "c:\\Users\\WK-06\\Documents\\PROJECTS\\ccytet-content-manager\\ccytet.Server\\obj\\",
+        "projectPath": "c:\\Users\\migue\\Documents\\PROJECTS\\ccytet\\ccytet.Server\\ccytet.Server.csproj",
+        "packagesPath": "C:\\Users\\migue\\.nuget\\packages\\",
+        "outputPath": "c:\\Users\\migue\\Documents\\PROJECTS\\ccytet\\ccytet.Server\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
-          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\WK-06\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\migue\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -37,12 +38,21 @@
           "warnAsError": [
             "NU1605"
           ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
         }
       },
       "frameworks": {
         "net7.0": {
           "targetAlias": "net7.0",
           "dependencies": {
+            "AutoMapper.Extensions.Microsoft.DependencyInjection": {
+              "target": "Package",
+              "version": "[12.0.1, )"
+            },
             "Microsoft.AspNetCore.Identity.EntityFrameworkCore": {
               "target": "Package",
               "version": "[7.0.13, )"
@@ -105,7 +115,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.203\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.200\\RuntimeIdentifierGraph.json"
         }
       }
     }

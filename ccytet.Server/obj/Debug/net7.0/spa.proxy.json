@@ -2,7 +2,7 @@
 "SpaProxyServer": {
 "ServerUrl": "https://localhost:5173",
 "LaunchCommand": "npm run dev",
-"WorkingDirectory": "c:\\Users\\WK-06\\Documents\\PROJECTS\\ccytet-content-manager\\ccytet.Server\\..\\ccytet.client",
+"WorkingDirectory": "c:\\Users\\migue\\Documents\\PROJECTS\\ccytet\\ccytet.Server\\..\\ccytet.client",
 "MaxTimeoutInSeconds": "120"
 }
 }
