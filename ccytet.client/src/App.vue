@@ -18,9 +18,6 @@ router.beforeEach((to) => {
     <router-view></router-view>
   </Main>
 
-  <router-view v-if="!auth"></router-view>
+  <router-view v-if="!auth">
+  </router-view>
 </template>
-
-<style scoped>
-
-</style>

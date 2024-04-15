@@ -1,3 +1,12 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.btn-primary {
+    @apply p-1 w-full rounded shadow !text-white !transition-all !duration-300 bg-blue-500
+}
+
+
+.btn-primary:disabled {
+    @apply !cursor-not-allowed !opacity-60 
+}
