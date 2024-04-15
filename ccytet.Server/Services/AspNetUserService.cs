@@ -17,10 +17,13 @@ namespace ccytet.Server.Services
         {
             var loginTransaction = await _context.Database.BeginTransactionAsync();
             string password = data.password;
+            string matricula = data.matricula;
 
             //Encriptamos la contraseña
             var passwordHasher = new PasswordHasher<AspNetUser>();
             string hashedPassword = passwordHasher.HashPassword(new AspNetUser(), password);
+
+            if(await _context.AspNetUsers.AnyAsync(x => x.Matricula == matricula)){ throw new ArgumentException("Este correo de usuario ya está en uso"); }
 
             AspNetUser newAspNetUser = new (){
                 Nombre                  = data.nombres,

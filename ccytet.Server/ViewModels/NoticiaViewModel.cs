@@ -15,13 +15,16 @@ namespace ccytet.Server.ViewModels
         public string FechaCreacionNatural                  => FechaCreacion.ToString("dd/MM/yyyy hh:mm tt");
         public DateTime FechaActualizacion                  { get; set; }
         public string FechaActualizacionNatural             => FechaActualizacion.ToString("dd/MM/yyyy hh:mm tt");
-        public string imagesArray                           { get; set; }
+        public string ImagesArray                           { get; set; }
+        public string Portada                               { get; set; }
 
         public bool Eliminado                               { get; set; }
 
         //RELATIONS
         public string IdUserCreator                         { get; set; }
+        public string UserCreatorName                       { get; set; }
 
         public string IdUserUpdater                         { get; set; }
+        public string UserUpdaterName                       { get; set; }
     }
 }

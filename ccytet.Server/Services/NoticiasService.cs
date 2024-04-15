@@ -43,6 +43,8 @@ namespace ccytet.Server.Services
                 Texto = data.body,
                 Eliminado = false,
                 IdUserCreator = id,
+                UserCreatorName = objUser.Nombre + " " +objUser.Apellidos,
+                UserUpdaterName = objUser.Nombre + " " +objUser.Apellidos,
                 IdUserUpdater = id
             };
 
@@ -67,7 +69,8 @@ namespace ccytet.Server.Services
                 noticiaImages.Add(storagePath);
             }
 
-            objNoticia.imagesArray = JsonConvert.SerializeObject(noticiaImages);
+            objNoticia.ImagesArray = JsonConvert.SerializeObject(noticiaImages);
+            objNoticia.Portada = noticiaImages.First();
             
             await _context.Noticias.AddAsync(objNoticia);
             await _context.SaveChangesAsync();
@@ -83,6 +86,20 @@ namespace ccytet.Server.Services
 
             // CONSTRUCCION RETORNO DE DATOS
             List<NoticiaViewModel> lstOriginal = objDataBuilder.rows;
+            List<dynamic>  lstRows = new();
+
+            lstOriginal.ForEach(item => 
+                lstRows.Add(new {
+                    item.IdNoticia,
+                    item.Titulo,
+                    Text = ReduceText(item.Texto),
+                    FechaCreacion = item.FechaCreacionNatural,
+                    FechaActualizacion = item.FechaActualizacionNatural,
+                    item.UserCreatorName,
+                    item.UserUpdaterName,
+                    Portada = JsonConvert.DeserializeObject<List<string>>(item.ImagesArray).FirstOrDefault(),
+                })
+            );
 
             var objResult = new
             {
@@ -103,6 +120,11 @@ namespace ccytet.Server.Services
 
             query = rows.ProjectTo<NoticiaViewModel>(_mapper.ConfigurationProvider);
             return query;
+        }
+
+        public static string ReduceText(string text)
+        {
+            return text.Substring(0, 30) + "...";
         }
     }
 }

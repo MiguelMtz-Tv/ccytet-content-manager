@@ -15,15 +15,18 @@ namespace ccytet.Server.Models
         public string Autor                                 { get; set; }
         public DateTime FechaCreacion                       { get; set; }
         public DateTime FechaActualizacion                  { get; set; }
-        public string imagesArray                           { get; set; }
+        public string ImagesArray                           { get; set; }
+        public string Portada                               { get; set; }
 
         public bool Eliminado                               { get; set; }
 
         //RELATIONS
         public virtual AspNetUser UserCreator               { get; set; }
         public string IdUserCreator                         { get; set; }
+        public string UserCreatorName                       { get; set; }
 
         public virtual AspNetUser UserUpdater               { get; set; }
         public string IdUserUpdater                         { get; set; }
+        public string UserUpdaterName                       { get; set; }
     }
 }

@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "c:\\Users\\migue\\Documents\\PROJECTS\\ccytet\\ccytet.Server\\ccytet.Server.csproj": {}
+    "C:\\Users\\migue\\Documents\\PROJECTS\\ccytet\\ccytet.Server\\ccytet.Server.csproj": {}
   },
   "projects": {
-    "c:\\Users\\migue\\Documents\\PROJECTS\\ccytet\\ccytet.Server\\ccytet.Server.csproj": {
+    "C:\\Users\\migue\\Documents\\PROJECTS\\ccytet\\ccytet.Server\\ccytet.Server.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "c:\\Users\\migue\\Documents\\PROJECTS\\ccytet\\ccytet.Server\\ccytet.Server.csproj",
+        "projectUniqueName": "C:\\Users\\migue\\Documents\\PROJECTS\\ccytet\\ccytet.Server\\ccytet.Server.csproj",
         "projectName": "ccytet.Server",
-        "projectPath": "c:\\Users\\migue\\Documents\\PROJECTS\\ccytet\\ccytet.Server\\ccytet.Server.csproj",
+        "projectPath": "C:\\Users\\migue\\Documents\\PROJECTS\\ccytet\\ccytet.Server\\ccytet.Server.csproj",
         "packagesPath": "C:\\Users\\migue\\.nuget\\packages\\",
-        "outputPath": "c:\\Users\\migue\\Documents\\PROJECTS\\ccytet\\ccytet.Server\\obj\\",
+        "outputPath": "C:\\Users\\migue\\Documents\\PROJECTS\\ccytet\\ccytet.Server\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
