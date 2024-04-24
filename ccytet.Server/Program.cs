@@ -9,6 +9,7 @@ using System.Text;
 using ccytet.Server.Tokens;
 using AutoMapper;
 using ccytet.Server.Utils;
+using Microsoft.Extensions.FileProviders;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -76,10 +77,14 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseCors( x => x.AllowAnyMethod().AllowAnyHeader().SetIsOriginAllowed(o => true).AllowCredentials());
-
 app.UseHttpsRedirection();
-
 app.UseAuthorization();
+app.UseStaticFiles(new StaticFileOptions
+{
+    FileProvider = new PhysicalFileProvider(
+        Path.Combine(builder.Environment.ContentRootPath, "public/noticias")),
+    RequestPath = "/public/noticias"
+});
 
 app.MapControllers();
 

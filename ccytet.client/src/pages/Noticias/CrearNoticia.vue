@@ -52,6 +52,7 @@
   import { NoticiasService } from '@/services/noticias-service';
   import { notification } from 'ant-design-vue';
 import type { AxiosRequestConfig, AxiosResponse } from 'axios';
+import router from '@/routing';
 
 
   const _noticiasService = new NoticiasService()
@@ -79,6 +80,7 @@ import type { AxiosRequestConfig, AxiosResponse } from 'axios';
       .then((res : AxiosResponse) => {
         spinning.value = false
         if(res.data.session && res.data.action){
+          router.push('/noticias')
           notification.success({
             message: 'Noticia creada',
             description: 'Ahora puedes verla en la lista de noticias'

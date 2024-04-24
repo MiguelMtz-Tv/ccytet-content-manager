@@ -79,7 +79,7 @@ namespace ccytet.Server.Services
 
         public async Task<dynamic> DataSource(dynamic data)
         {
-            IQueryable<NoticiaViewModel> lstData = DataSourceExpression();
+            IQueryable<NoticiaViewModel> lstData = DataSourceExpression(data);
 
             DataSourceBuilder<NoticiaViewModel> objDataSourceBuilder = new DataSourceBuilder<NoticiaViewModel>(data, lstData);
             var objDataBuilder = await objDataSourceBuilder.build();
@@ -92,18 +92,18 @@ namespace ccytet.Server.Services
                 lstRows.Add(new {
                     item.IdNoticia,
                     item.Titulo,
-                    Text = ReduceText(item.Texto),
                     FechaCreacion = item.FechaCreacionNatural,
                     FechaActualizacion = item.FechaActualizacionNatural,
                     item.UserCreatorName,
                     item.UserUpdaterName,
-                    Portada = JsonConvert.DeserializeObject<List<string>>(item.ImagesArray).FirstOrDefault(),
+                    item.Portada,
+                    item.Autor
                 })
             );
 
             var objResult = new
             {
-                rows    = lstOriginal,
+                rows    = lstRows,
                 count   = objDataBuilder.count,
                 length  = objDataBuilder.length,
                 pages   = objDataBuilder.pages,
@@ -112,14 +112,45 @@ namespace ccytet.Server.Services
 
             return objResult;
         }
-
-        public IQueryable<NoticiaViewModel> DataSourceExpression()
+       
+        public IQueryable<NoticiaViewModel> DataSourceExpression(dynamic data)
         {
             IQueryable<NoticiaViewModel> query;
             IQueryable<Noticia> rows = _context.Noticias.AsNoTracking().OrderBy(x => x.FechaCreacion).Where(x => !x.Eliminado);
 
+            if(!String.IsNullOrEmpty(data.search.Value))
+            {
+                string arg = data.search.Value;
+                rows = rows.Where(x => x.Titulo.Contains(arg) || x.Autor.Contains(arg) || x.Texto.Contains(arg));
+            }
+
             query = rows.ProjectTo<NoticiaViewModel>(_mapper.ConfigurationProvider);
             return query;
+        }
+       
+        public async Task<dynamic> Watch(dynamic data)
+        {
+            string id = data.id;
+            Noticia objNoticia = await _context.Noticias.AsNoTracking().Where(x => x.IdNoticia == id).FirstOrDefaultAsync();
+            dynamic noticia = new {
+                view = objNoticia,
+                images = JsonConvert.DeserializeObject<List<string>>(objNoticia.ImagesArray)
+            };
+
+            return noticia;
+        }
+
+        public async Task ToggleStatus(dynamic data)
+        {
+            var loginTransaction = await _context.Database.BeginTransactionAsync();
+
+            string id = data.id;
+            Noticia noticia= await _context.Noticias.Where(x => x.IdNoticia == id).FirstOrDefaultAsync();
+            noticia.Eliminado = !noticia.Eliminado;
+
+            _context.Noticias.Update(noticia);
+            await _context.SaveChangesAsync();
+            await loginTransaction.CommitAsync();
         }
 
         public static string ReduceText(string text)

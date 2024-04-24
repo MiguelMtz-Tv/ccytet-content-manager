@@ -15,4 +15,9 @@ export class NoticiasService {
     {
         return axios.post<any>(this.baseUrl + 'api/noticias/dataSource', varArgs, Sessions.header())
     }
+
+    public watch(id:string){
+        let varArgs = { id: id }
+        return axios.post<any>(this.baseUrl + 'api/noticias/watch', varArgs, Sessions.header())
+    }
 }
