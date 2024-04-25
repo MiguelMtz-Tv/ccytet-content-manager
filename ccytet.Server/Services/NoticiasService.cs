@@ -133,7 +133,18 @@ namespace ccytet.Server.Services
             string id = data.id;
             Noticia objNoticia = await _context.Noticias.AsNoTracking().Where(x => x.IdNoticia == id).FirstOrDefaultAsync();
             dynamic noticia = new {
-                view = objNoticia,
+                view = new 
+                {
+                    IdNoticia           = objNoticia.IdNoticia,
+                    Titulo              = objNoticia.Titulo,
+                    Texto               = objNoticia.Texto,
+                    Autor               = objNoticia.Autor,
+                    FechaCreacion       = objNoticia.FechaCreacion.ToString("dd/MM/yyyy hh:mm tt"),
+                    FechaActualizacion  = objNoticia.FechaActualizacion.ToString("dd/MM/yyyy hh:mm tt"),
+                    Eliminado           = objNoticia.Eliminado,
+                    UserCreator         = objNoticia.UserCreator,
+                    UserUpdater         = objNoticia.UserUpdater
+                },
                 images = JsonConvert.DeserializeObject<List<string>>(objNoticia.ImagesArray)
             };
 

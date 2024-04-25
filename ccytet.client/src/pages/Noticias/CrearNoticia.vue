@@ -1,4 +1,4 @@
-<template>
+<template class="bg-white">
   <a-spin :spinning="spinning" tip="Subiendo noticia...">
     <div class="mb-4 w-full flex justify-between items-center">
         <div><span class="text-lg font-bold">Noticias</span> / <span class="text-blue-500">Crer noticia</span></div>

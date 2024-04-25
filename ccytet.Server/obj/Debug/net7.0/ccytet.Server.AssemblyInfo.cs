@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("ccytet.Server")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+764c167488fb9a4c47c20f2d3c80b48eb1eb59c6")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+dd7b317c649cd5b8eb06fd3776c172af12bd0d23")]
 [assembly: System.Reflection.AssemblyProductAttribute("ccytet.Server")]
 [assembly: System.Reflection.AssemblyTitleAttribute("ccytet.Server")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

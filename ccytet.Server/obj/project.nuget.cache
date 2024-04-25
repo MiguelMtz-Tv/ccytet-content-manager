@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "tyIefPvXFY76fNM8ySdlVeOZlI22mPuwZ0tqo+rxv86fFJhwDxYTGmWUWKIEPRNaH+Eg1vzSnC4pHTjTg9BHqg==",
+  "dgSpecHash": "+oaMc4FcvXaOY9tvxo+rs+pRGxZ6uqRQUaU4bTFmk3o2VTYyO0MQyOrsN5nSevg1v+OVy3yB4ZKn0lqB5wr3jw==",
   "success": true,
-  "projectFilePath": "C:\\Users\\migue\\Documents\\PROJECTS\\ccytet\\ccytet.Server\\ccytet.Server.csproj",
+  "projectFilePath": "c:\\Users\\migue\\Documents\\PROJECTS\\ccytet\\ccytet.Server\\ccytet.Server.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\migue\\.nuget\\packages\\automapper\\12.0.1\\automapper.12.0.1.nupkg.sha512",
     "C:\\Users\\migue\\.nuget\\packages\\automapper.extensions.microsoft.dependencyinjection\\12.0.1\\automapper.extensions.microsoft.dependencyinjection.12.0.1.nupkg.sha512",

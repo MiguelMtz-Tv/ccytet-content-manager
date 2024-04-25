@@ -1,4 +1,10 @@
 <template>
+
+    <!-- Dialogs -->
+    <v-dialog fullscreen v-model="details">
+        <VerNoticia :id="selectedNew" @close-dialog="details = false"></VerNoticia>
+    </v-dialog>
+
     <div class="flex space-x-2">
         <a-input-search v-model:value="txtSearch" placeholder="Buscar" style="width: 200px" @search="onSearch" />
 
@@ -15,8 +21,7 @@
             <input type="date" class="text-xs border rounded p-0.5 focus:outline-none">
         </a-tooltip>
     </div>
-    <v-data-table-virtual fixed-header :loading="loading" :headers="headers" :items="items" :height="height"
-        item-value="id">
+    <v-data-table-virtual fixed-header :loading="loading" :headers="headers" :items="items" :height="height" item-value="id">
         <template v-slot:item.portada="{item}">
             <img class="h-8" :src="baseUrl+item.portada" alt="">
         </template>
@@ -37,11 +42,6 @@
         </template>
     </v-data-table-virtual>
     <a-pagination v-model:current="page" @change="managePagination" :total="count" />
-
-    <!-- Dialogs -->
-    <v-dialog max-width="500px" height="99%" v-model="details">
-        <VerNoticia :id="selectedNew" @close-dialog="details = false"></VerNoticia>
-    </v-dialog>
 </template>
 
 <script setup lang="ts">
@@ -49,10 +49,11 @@ import NewCard from '@/components/NewCard.vue';
 import { Server } from '@/libraries/servers';
 import { NoticiasService } from '@/services/noticias-service';
 import { onMounted } from 'vue';
-import { type Ref, ref, computed, watch, type ComputedRef } from 'vue';
+import { type Ref, ref } from 'vue';
 import { DownOutlined } from '@ant-design/icons-vue';
 import VerNoticia from './VerNoticia.vue'
-import dialogPropTypes from 'ant-design-vue/es/vc-dialog/IDialogPropTypes';
+import router from '@/routing';
+import {PlusOutlined} from '@ant-design/icons-vue';
 
 onMounted(() => {
     index(page.value, length.value)
@@ -133,6 +134,14 @@ let items: Array<any> = new Array<any>()
     display: flex;
     justify-content: center;
     align-items: center;
+}
+
+tr {
+    font-size: 11px;
+    max-width: 300px;
+    white-space: nowrap;
+    overflow: hidden; /* Oculta el texto que no cabe */
+    text-overflow: ellipsis;
 }
 </style>
 
