@@ -10,11 +10,10 @@
 using System;
 using System.Reflection;
 
-[assembly: Microsoft.AspNetCore.Identity.UI.UIFrameworkAttribute("Bootstrap5")]
 [assembly: System.Reflection.AssemblyCompanyAttribute("ccytet.Server")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+dd7b317c649cd5b8eb06fd3776c172af12bd0d23")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+b4fca86ae0ab24544e9943a68381bbec363199c3")]
 [assembly: System.Reflection.AssemblyProductAttribute("ccytet.Server")]
 [assembly: System.Reflection.AssemblyTitleAttribute("ccytet.Server")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
