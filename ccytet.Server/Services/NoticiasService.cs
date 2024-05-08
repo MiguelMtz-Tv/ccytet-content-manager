@@ -58,7 +58,7 @@ namespace ccytet.Server.Services
 
                 string storagePath = Path.Combine(imagePath, fileName);
 
-                byte[] bytes = Convert.FromBase64String(file.base64.Replace("data:image/png;base64,", ""));
+                byte[] bytes = Convert.FromBase64String(file.base64.Split(',')[1]);
 
                 using (FileStream stream = new (storagePath, FileMode.Create))
                 {

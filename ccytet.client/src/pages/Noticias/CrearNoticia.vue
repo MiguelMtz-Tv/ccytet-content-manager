@@ -50,9 +50,9 @@
   import { ref } from 'vue';
   import type { UploadProps } from 'ant-design-vue';
   import { NoticiasService } from '@/services/noticias-service';
-  import { notification } from 'ant-design-vue';
-import type { AxiosRequestConfig, AxiosResponse } from 'axios';
-import router from '@/routing';
+  import { Upload, notification } from 'ant-design-vue';
+  import type { AxiosRequestConfig, AxiosResponse } from 'axios';
+  import router from '@/routing';
 
 
   const _noticiasService = new NoticiasService()
@@ -111,15 +111,21 @@ import router from '@/routing';
   }
 
   const bfUpload = async (e: any) => {
-    let base64: any
-    await getBase64(e).then(e1 => base64 = e1)
+    console.log(e)
+    const valid = e.type == 'image/png' || e.type == 'image/jpeg'
+    if(valid){
+      let base64: any
+      await getBase64(e).then(e1 => base64 = e1)
 
-    files.push({
-      uid: e.uid,
-      base64: base64
-    })
+      files.push({
+        uid: e.uid,
+        base64: base64
+      })
+      return false
+    }
 
-    return false
+    setNotification('Extensión de archivo invalido. Solo se admiten archivos tipo JPEG y PNG')
+    return Upload.LIST_IGNORE
   }
 
 

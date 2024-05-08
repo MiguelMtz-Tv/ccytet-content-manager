@@ -1,13 +1,15 @@
 <template>
-
     <!-- Dialogs -->
     <v-dialog fullscreen v-model="details">
         <VerNoticia :id="selectedNew" @close-dialog="details = false"></VerNoticia>
     </v-dialog>
 
+    <v-dialog fullscreen v-model="update">
+        <ActualizarNoticia :id="selectedNew" @close-dialog="update = false"></ActualizarNoticia>
+    </v-dialog>
+
     <div class="flex space-x-2">
         <a-input-search v-model:value="txtSearch" placeholder="Buscar" style="width: 200px" @search="onSearch" />
-
         <a-tooltip>
             <template #title>
                 <span>Filtrar desde</span>
@@ -33,7 +35,7 @@
                 </div>
                 <template #overlay>
                     <a-menu>
-                        <a-menu-item>Editar</a-menu-item>
+                        <a-menu-item @click="openUpdate(item.idNoticia)">Editar</a-menu-item>
                         <a-menu-item>Hacer visible</a-menu-item>
                         <a-menu-item @click="openDetails(item.idNoticia)">Ver en detalle</a-menu-item>
                     </a-menu>
@@ -45,15 +47,13 @@
 </template>
 
 <script setup lang="ts">
-import NewCard from '@/components/NewCard.vue';
 import { Server } from '@/libraries/servers';
 import { NoticiasService } from '@/services/noticias-service';
 import { onMounted } from 'vue';
 import { type Ref, ref } from 'vue';
 import { DownOutlined } from '@ant-design/icons-vue';
 import VerNoticia from './VerNoticia.vue'
-import router from '@/routing';
-import {PlusOutlined} from '@ant-design/icons-vue';
+import ActualizarNoticia from './ActualizarNoticia.vue';
 
 onMounted(() => {
     index(page.value, length.value)
@@ -62,12 +62,16 @@ onMounted(() => {
 const _noticiasService = new NoticiasService()
 
 let details: Ref<boolean> = ref(false)
+let update: Ref<boolean> = ref(false)
 let selectedNew: Ref<string> = ref('')
 
 let count: Ref<number> = ref(0)
 let length: Ref<number> = ref(10)
 let pages: Ref<number> = ref(1)
 let page: Ref<number> = ref(1)
+
+//elements
+let updateElement: Ref<any> = ref(null)
 
 let txtSearch: Ref<string> = ref('')
 function onSearch(e : any){
@@ -76,6 +80,11 @@ function onSearch(e : any){
 
 function openDetails(id : string){
     details.value = true
+    selectedNew.value = id
+}
+
+function openUpdate(id : string){
+    update.value = true
     selectedNew.value = id
 }
 
