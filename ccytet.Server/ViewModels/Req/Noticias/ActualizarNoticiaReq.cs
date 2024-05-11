@@ -5,11 +5,11 @@ using System.Threading.Tasks;
 
 namespace ccytet.Server.ViewModels.Req.Noticias
 {
-    public class CreateNoticiaReq
+    public class ActualizarNoticiaReq
     {
-
         public class Root
         {
+            public string IdNoticia { get; set; }
             public string titulo    { get; set; }
             public string autor     { get; set; }
             public string body      { get; set; }

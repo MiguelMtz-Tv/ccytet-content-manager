@@ -111,7 +111,6 @@
   }
 
   const bfUpload = async (e: any) => {
-    console.log(e)
     const valid = e.type == 'image/png' || e.type == 'image/jpeg'
     if(valid){
       let base64: any

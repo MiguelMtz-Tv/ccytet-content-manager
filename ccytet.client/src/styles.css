@@ -6,13 +6,15 @@
     @apply p-1 w-full rounded shadow !text-white !transition-all !duration-300 bg-blue-500
 }
 
+.btn-basic{
+    @apply p-1 rounded shadow !transition-all !duration-300 bg-slate-100 hover:bg-blue-50 hover:text-blue-500 flex items-center justify-center
+}
 
 .btn-primary:disabled {
     @apply !cursor-not-allowed !opacity-60 
 }
 
 /* Dialogs body structure */
-
 .dialog{
     @apply w-full h-full bg-white flex flex-col
 }
@@ -22,7 +24,7 @@
 }
 
 .dialog-body{
-    @apply p-4 flex-grow
+    @apply p-4 flex-grow overflow-auto
 }
 
 .dialog-footer{

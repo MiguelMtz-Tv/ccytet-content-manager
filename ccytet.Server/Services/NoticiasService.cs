@@ -4,12 +4,14 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using ccytet.Server.Data;
 using ccytet.Server.Models;
 using ccytet.Server.ViewModels;
 using ccytet.Server.ViewModels.Req.Noticias;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using Workcube.Libraries;
@@ -43,8 +45,8 @@ namespace ccytet.Server.Services
                 Texto = data.body,
                 Eliminado = false,
                 IdUserCreator = id,
-                UserCreatorName = objUser.Nombre + " " +objUser.Apellidos,
-                UserUpdaterName = objUser.Nombre + " " +objUser.Apellidos,
+                UserCreatorName = string.Format("{0} {1}", objUser.Nombre, objUser.Apellidos),
+                UserUpdaterName = string.Format("{0} {1}", objUser.Nombre, objUser.Apellidos),
                 IdUserUpdater = id
             };
 
@@ -118,6 +120,20 @@ namespace ccytet.Server.Services
             IQueryable<NoticiaViewModel> query;
             IQueryable<Noticia> rows = _context.Noticias.AsNoTracking().OrderBy(x => x.FechaCreacion).Where(x => !x.Eliminado);
 
+            if(!String.IsNullOrEmpty(data.dateFrom.Value))
+            {
+                string arg = data.dateFrom.Value;
+                DateTime dateFrom =  DateTime.Parse(arg);
+                rows = rows.Where(x => x.FechaCreacion >= dateFrom);
+            }
+
+            if(!String.IsNullOrEmpty(data.dateTo.Value))
+            {
+                string arg = data.dateTo.Value;
+                DateTime dateTo =  DateTime.Parse(arg);
+                rows = rows.Where(x => x.FechaCreacion >= dateTo);
+            }
+
             if(!String.IsNullOrEmpty(data.search.Value))
             {
                 string arg = data.search.Value;
@@ -128,6 +144,62 @@ namespace ccytet.Server.Services
             return query;
         }
        
+        public async Task Update(ActualizarNoticiaReq.Root data, ClaimsPrincipal user)
+        {
+            var loginTransaction = await _context.Database.BeginTransactionAsync();
+
+            Noticia objNoticia = await _context.Noticias.FindAsync(data.IdNoticia);
+            
+            string id = Globals.GetClaim("Id", user);
+            AspNetUser objUser = await _context.AspNetUsers.AsNoTracking().Where(x => x.Id == id).FirstOrDefaultAsync();
+
+            objNoticia.Titulo                = data.titulo;
+            objNoticia.Texto                 = data.body;
+            objNoticia.Autor                 = !String.IsNullOrEmpty(data.autor) ? data.autor : "Autor anonimo";  
+            objNoticia.FechaActualizacion    = DateTime.Now;
+            objNoticia.IdUserUpdater         = objUser.Id;
+            objNoticia.UserUpdaterName       =  string.Format("{0} {1}", objUser.Nombre, objUser.Apellidos);
+
+            List<string> lstImagenes        = JsonConvert.DeserializeObject<List<string>>(objNoticia.ImagesArray);
+            List<string> removedImages      = lstImagenes.Where(x => !data.files.Select(x => x.uid).Contains(GetImageName(x))).ToList();
+
+            lstImagenes = lstImagenes.Where(x => data.files.Select(x => x.uid).Contains(GetImageName(x))).ToList(); // remove images removed for users
+
+            data.files.ForEach(x =>
+            {
+                if(x.base64 != "exist")
+                {
+                    string imagePath    = Path.Combine("Public","Noticias");
+                    string fileName     = $"{Guid.NewGuid().ToString()}.png";
+                    string storagePath  = Path.Combine(imagePath, fileName);
+                    byte[] bytes        = Convert.FromBase64String(x.base64.Split(',')[1]);
+
+                    using (FileStream stream = new (storagePath, FileMode.Create))
+                    {
+                        stream.Write(bytes, 0, bytes.Length);
+                        stream.Flush();
+                    }
+
+                    lstImagenes.Add(storagePath);
+                }
+            });
+
+            removedImages.ForEach(x => //delete removed images
+            {
+                if(File.Exists(Path.Combine(x)))
+                {
+                    File.Delete(Path.Combine(x));
+                }
+            });
+
+            objNoticia.Portada  = lstImagenes.FirstOrDefault();
+            objNoticia.ImagesArray = JsonConvert.SerializeObject(lstImagenes);
+
+            _context.Noticias.Update(objNoticia);
+            await _context.SaveChangesAsync();
+            await loginTransaction.CommitAsync();
+        }
+
         public async Task<dynamic> Watch(dynamic data)
         {
             string id = data.id;
@@ -164,9 +236,14 @@ namespace ccytet.Server.Services
             await loginTransaction.CommitAsync();
         }
 
-        public static string ReduceText(string text)
+        private static string ReduceText(string text)
         {
             return text.Substring(0, 30) + "...";
+        }
+
+        private static string GetImageName(string name)
+        {
+            return name.Split("\\")[2];
         }
     }
 }

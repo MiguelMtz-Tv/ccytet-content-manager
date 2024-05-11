@@ -62,6 +62,28 @@ namespace ccytet.Server.Controllers
         }
 
         [Authorize(AuthenticationSchemes = "Bearer")]
+        [HttpPost("update")]
+        public async Task<ActionResult<dynamic>> Update([FromBody] ActualizarNoticiaReq.Root data)
+        {
+            JsonReturn objReturn = new();
+            try
+            {
+                await _noticiasService.Update(data, User);
+                objReturn.Success(SuccessMessage.REQUEST);
+            }
+            catch(AppException ex)
+            {
+                objReturn.Exception(ex);
+            }
+            catch(Exception ex)
+            {
+                objReturn.Exception(ExceptionMessage.RawException(ex));
+            }
+
+            return objReturn.build();
+        }
+
+        [Authorize(AuthenticationSchemes = "Bearer")]
         [HttpPost("watch")]
         public async Task<ActionResult<dynamic>> Watch([FromBody] JsonObject data)
         {

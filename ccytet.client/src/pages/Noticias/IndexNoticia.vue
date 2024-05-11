@@ -5,7 +5,7 @@
     </v-dialog>
 
     <v-dialog fullscreen v-model="update">
-        <ActualizarNoticia :id="selectedNew" @close-dialog="update = false"></ActualizarNoticia>
+        <ActualizarNoticia :id="selectedNew" @closeDialog="update = false; index()"></ActualizarNoticia>
     </v-dialog>
 
     <div class="flex space-x-2">
@@ -14,13 +14,21 @@
             <template #title>
                 <span>Filtrar desde</span>
             </template>
-            <input type="date" class="text-xs border rounded p-0.5 focus:outline-none">
+            <input type="date" v-model="dateFrom" @change="index()" class="text-xs border rounded p-0.5 focus:outline-none">
         </a-tooltip>
         <a-tooltip>
             <template #title>
                 <span>Filtrar Hasta</span>
             </template>
-            <input type="date" class="text-xs border rounded p-0.5 focus:outline-none">
+            <input type="date" v-model="dateTo" @change="index()" class="text-xs border rounded p-0.5 focus:outline-none">
+        </a-tooltip>
+        <a-tooltip>
+            <template #title>
+                <span>Limpiar fechas</span>
+            </template>
+            <button class="btn-basic text-xs" @click="dateTo=''; dateFrom=''; index()">
+                <CloseOutlined />
+            </button>
         </a-tooltip>
     </div>
     <v-data-table-virtual fixed-header :loading="loading" :headers="headers" :items="items" :height="height" item-value="id">
@@ -54,9 +62,10 @@ import { type Ref, ref } from 'vue';
 import { DownOutlined } from '@ant-design/icons-vue';
 import VerNoticia from './VerNoticia.vue'
 import ActualizarNoticia from './ActualizarNoticia.vue';
+import {CloseOutlined} from '@ant-design/icons-vue';
 
 onMounted(() => {
-    index(page.value, length.value)
+    index()
 })
 
 const _noticiasService = new NoticiasService()
@@ -69,6 +78,9 @@ let count: Ref<number> = ref(0)
 let length: Ref<number> = ref(10)
 let pages: Ref<number> = ref(1)
 let page: Ref<number> = ref(1)
+
+let dateFrom: Ref<string> = ref('')
+let dateTo: Ref<string> = ref('')
 
 //elements
 let updateElement: Ref<any> = ref(null)
@@ -92,11 +104,13 @@ const baseUrl = Server.baseUrl
 
 let loading: Ref<boolean> = ref(false)
 
-function index(epage: number, elength: number){
+function index(){
     loading.value = true
     _noticiasService.dataSource({
-        page: epage,
-        length: elength,
+        dateFrom: dateFrom.value,
+        dateTo: dateTo.value,
+        page: page.value,
+        length: length.value,
         search: txtSearch.value.trim(),
     }).then(res => {
         loading.value = false
@@ -120,14 +134,14 @@ window.addEventListener('resize', () => {
 })
 
 function managePagination(epage : any, elength: any){
-    index(epage, elength)
     page.value = epage
     length.value = elength
+    index()
 }
 
 const headers : Array<any> = [
     {title: '',                     align: 'start',     key: 'portada'},
-    {title: 'Acciones',                     align: 'start',     key: 'acciones'},
+    {title: 'Acciones',             align: 'start',     key: 'acciones'},
     {title: 'Titulo',               align: 'start',     key: 'titulo'},
     {title: 'Autor',                align: 'start',     key: 'autor'},
     {title: 'Fecha de creación',    align: 'start',     key: 'fechaCreacion'},
