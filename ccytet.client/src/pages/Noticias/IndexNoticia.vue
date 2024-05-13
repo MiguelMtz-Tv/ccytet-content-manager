@@ -69,28 +69,30 @@ onMounted(() => {
 })
 
 const _noticiasService = new NoticiasService()
+/* BOOLEANS */
+let details         : Ref<boolean>  = ref(false)
+let update          : Ref<boolean>  = ref(false)
 
-let details: Ref<boolean> = ref(false)
-let update: Ref<boolean> = ref(false)
-let selectedNew: Ref<string> = ref('')
+/* PAGINATIONS */
+let count           : Ref<number>   = ref(0)
+let length          : Ref<number>   = ref(10)
+let pages           : Ref<number>   = ref(1)
+let page            : Ref<number>   = ref(1)
 
-let count: Ref<number> = ref(0)
-let length: Ref<number> = ref(10)
-let pages: Ref<number> = ref(1)
-let page: Ref<number> = ref(1)
+let dateFrom        : Ref<string>   = ref('')
+let dateTo          : Ref<string>   = ref('')
 
-let dateFrom: Ref<string> = ref('')
-let dateTo: Ref<string> = ref('')
+//ELEMENTS
+let selectedNew     : Ref<string>   = ref('')
+let updateElement   : Ref<any>      = ref(null)
 
-//elements
-let updateElement: Ref<any> = ref(null)
+let txtSearch       : Ref<string>   = ref('')
 
-let txtSearch: Ref<string> = ref('')
-function onSearch(e : any){
-    index(page.value, length.value)
+const onSearch = (e : any) => {
+    index()
 }
 
-function openDetails(id : string){
+const openDetails = (id : string) => {
     details.value = true
     selectedNew.value = id
 }
@@ -104,7 +106,7 @@ const baseUrl = Server.baseUrl
 
 let loading: Ref<boolean> = ref(false)
 
-function index(){
+const index = () => {
     loading.value = true
     _noticiasService.dataSource({
         dateFrom: dateFrom.value,
@@ -133,7 +135,7 @@ window.addEventListener('resize', () => {
     height.value = window.innerHeight - 158
 })
 
-function managePagination(epage : any, elength: any){
+const managePagination = (epage : any, elength: any) => {
     page.value = epage
     length.value = elength
     index()
