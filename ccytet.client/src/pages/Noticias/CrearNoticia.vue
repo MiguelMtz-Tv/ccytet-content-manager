@@ -51,7 +51,7 @@
   import type { UploadProps } from 'ant-design-vue';
   import { NoticiasService } from '@/services/noticias-service';
   import { Upload, notification } from 'ant-design-vue';
-  import type { AxiosRequestConfig, AxiosResponse } from 'axios';
+  import type { AxiosResponse } from 'axios';
   import router from '@/routing';
 
 

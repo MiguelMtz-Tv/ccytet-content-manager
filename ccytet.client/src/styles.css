@@ -39,3 +39,15 @@
     width: 200px;
     height: 30px; 
 }
+
+.link-a{
+    @apply text-blue-500
+}
+
+.breadcrum-green{
+    @apply p-1 bg-green-500 font-semibold text-white rounded
+}
+
+.breadcrum-red{
+ @apply p-1 bg-red-500 font-semibold text-white rounded
+}

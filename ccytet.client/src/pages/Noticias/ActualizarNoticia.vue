@@ -50,7 +50,7 @@ import type { AxiosResponse } from 'axios';
 import { onMounted, ref, type Ref } from 'vue';
 import { Upload, notification } from 'ant-design-vue';
 import { Server } from '@/libraries/servers';
-import CustomNotification from '../../services/custom-notification-service'
+import {CustomNotification} from '@/services/custom-notification-service'
 import router from '@/routing';
 
 let _noticiasService: NoticiasService = new NoticiasService()

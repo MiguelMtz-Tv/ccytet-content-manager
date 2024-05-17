@@ -1,6 +1,6 @@
 import { notification, type NotificationPlacement } from "ant-design-vue"
 
-export default class CustomNotification{
+export class CustomNotification{
     public error(message : string, position: NotificationPlacement = 'bottomRight'){
         notification.open({message: message, placement: position, style:{
             'border' : 'red solid 1px',
