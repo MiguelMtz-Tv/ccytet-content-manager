@@ -59,6 +59,7 @@ builder.Services.AddSingleton<JwtHandler>();
 //Scope Services
 builder.Services.AddScoped<AspNetUserService, AspNetUserService>();
 builder.Services.AddScoped<NoticiasService, NoticiasService>();
+builder.Services.AddScoped<ConvocatoriasService, ConvocatoriasService>();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -82,8 +83,8 @@ app.UseAuthorization();
 app.UseStaticFiles(new StaticFileOptions
 {
     FileProvider = new PhysicalFileProvider(
-        Path.Combine(builder.Environment.ContentRootPath, "public/noticias")),
-    RequestPath = "/public/noticias"
+        Path.Combine(builder.Environment.ContentRootPath, "public")),
+    RequestPath = "/Public",
 });
 
 app.MapControllers();

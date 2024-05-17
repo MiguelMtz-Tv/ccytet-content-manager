@@ -13,6 +13,7 @@ namespace ccytet.Server.Utils
         public MappingProfile()
         {
             CreateMap<Noticia, NoticiaViewModel>();
+            CreateMap<Convocatoria, ConvocatoriaViewModel>();
         }
     }
 }

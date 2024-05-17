@@ -118,7 +118,7 @@ namespace ccytet.Server.Services
         public IQueryable<NoticiaViewModel> DataSourceExpression(dynamic data)
         {
             IQueryable<NoticiaViewModel> query;
-            IQueryable<Noticia> rows = _context.Noticias.AsNoTracking().OrderBy(x => x.FechaCreacion).Where(x => !x.Eliminado);
+            IQueryable<Noticia> rows = _context.Noticias.AsNoTracking().OrderByDescending(x => x.FechaCreacion).Where(x => !x.Eliminado);
 
             if(!String.IsNullOrEmpty(data.dateFrom.Value))
             {
@@ -131,7 +131,7 @@ namespace ccytet.Server.Services
             {
                 string arg = data.dateTo.Value;
                 DateTime dateTo =  DateTime.Parse(arg);
-                rows = rows.Where(x => x.FechaCreacion >= dateTo);
+                rows = rows.Where(x => x.FechaCreacion <= dateTo);
             }
 
             if(!String.IsNullOrEmpty(data.search.Value))
