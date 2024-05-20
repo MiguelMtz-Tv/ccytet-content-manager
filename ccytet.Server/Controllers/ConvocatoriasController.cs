@@ -70,6 +70,72 @@ namespace ccytet.Server.Controllers
             return objReturn.build();
         }
 
+        [HttpPost("Update")]
+        [Authorize(AuthenticationSchemes = "Bearer")]
+        public async Task<ActionResult<dynamic>> Update([FromBody] ActualizarConvocatoria.Root data)
+        {
+            JsonReturn objReturn = new();
+            try
+            {
+                await _convocatoriasService.Update(User, data);
+                objReturn.Success(SuccessMessage.REQUEST);
+            }
+            catch(AppException ex)
+            {
+                objReturn.Exception(ex);
+            }
+            catch(Exception ex)
+            {
+                objReturn.Exception(ExceptionMessage.RawException(ex));
+            }
+
+            return objReturn.build();
+        }
+
+        [HttpPost("ToggleStatus")]
+        [Authorize(AuthenticationSchemes = "Bearer")]
+        public async Task<ActionResult<dynamic>> ToggleStatus([FromBody] JsonObject data)
+        {
+            JsonReturn objReturn = new();
+            try
+            {
+                await _convocatoriasService.ToggleStatus(User, Globals.JsonData(data));
+                objReturn.Success(SuccessMessage.REQUEST);
+            }
+            catch(AppException ex)
+            {
+                objReturn.Exception(ex);
+            }
+            catch(Exception ex)
+            {
+                objReturn.Exception(ExceptionMessage.RawException(ex));
+            }
+
+            return objReturn.build();
+        }
+
+        [HttpPost("ToggleVisibility")]
+        [Authorize(AuthenticationSchemes = "Bearer")]
+        public async Task<ActionResult<dynamic>> ToggleVisibility([FromBody] JsonObject data)
+        {
+            JsonReturn objReturn = new();
+            try
+            {
+                await _convocatoriasService.ToggleVisibility(User, Globals.JsonData(data));
+                objReturn.Success(SuccessMessage.REQUEST);
+            }
+            catch(AppException ex)
+            {
+                objReturn.Exception(ex);
+            }
+            catch(Exception ex)
+            {
+                objReturn.Exception(ExceptionMessage.RawException(ex));
+            }
+
+            return objReturn.build();
+        }
+
         [Authorize(AuthenticationSchemes = "Bearer")]
         [HttpPost("Watch")]
         public async Task<ActionResult<dynamic>> Watch([FromBody] JsonObject data)

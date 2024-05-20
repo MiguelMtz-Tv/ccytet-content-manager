@@ -1,45 +1,43 @@
 <template>
-  <a-spin :spinning="spinning">
-    <div class="dialog">
-        <div class="dialog-header">
-            <span class="text-lg font-bold">
-                Editar noticia "{{ titulo }}"
-            </span>
-        </div>
-        <div class="dialog-body">
-            <div class="w-full flex">
-                <div class="w-3/4 mr-0.5">
-                    <div class="mb-3">Titulo</div>
-                    <a-input v-model:value="titulo" class="w-full mb-4" placeholder="Ingresa el titulo" />
-                </div>
-                <div class="w-1/4 ml-0.5">
-                    <div class="mb-3">Autor</div>
-                    <a-input v-model:value="autor" class="w-full mb-4" placeholder="Nombre del autor (opcional)" />
-                </div>
-            </div>
-
-            <ckeditor id="editor" :editor="editor" v-model="body" :config="editorConfig"></ckeditor>
-
-            <div class="mt-4">
-                <div class="mb-3">Cargar imagenes</div>
-                <a-upload v-model:file-list="fileList" :before-upload="bfUpload" list-type="picture-card"
-                    @preview="handlePreview" @remove="onRemove">
-                    <div v-if="fileList!.length < 8">
-                        <plus-outlined />
-                        <div style="margin-top: 8px">Añadir</div>
-                    </div>
-                </a-upload>
-                <a-modal :open="previewVisible" :title="previewTitle" :footer="null" @cancel="handleCancel">
-                    <img alt="example" style="width: 100%" :src="previewImage" />
-                </a-modal>
-            </div>
-        </div>
-        <div class="dialog-footer">
-            <a-button type="primary" ghost class="mr-2" @click="onSubmit">Actualizar</a-button>
-            <a-button type="primary" ghost @click="$emit('closeDialog')">Cerrar</a-button>
-        </div>
+  <div class="dialog">
+    <div class="dialog-header">
+      <span class="text-lg font-bold">
+        Editar noticia "{{ titulo }}"
+      </span>
     </div>
-  </a-spin>
+    <div class="dialog-body">
+      <div class="w-full flex">
+        <div class="w-3/4 mr-0.5">
+          <div class="mb-3">Titulo</div>
+          <a-input v-model:value="titulo" class="w-full mb-4" placeholder="Ingresa el titulo" />
+        </div>
+        <div class="w-1/4 ml-0.5">
+          <div class="mb-3">Autor</div>
+          <a-input v-model:value="autor" class="w-full mb-4" placeholder="Nombre del autor (opcional)" />
+        </div>
+      </div>
+
+      <ckeditor id="editor" :editor="editor" v-model="body" :config="editorConfig"></ckeditor>
+
+      <div class="mt-4">
+        <div class="mb-3">Cargar imagenes</div>
+        <a-upload v-model:file-list="fileList" :before-upload="bfUpload" list-type="picture-card"
+          @preview="handlePreview" @remove="onRemove">
+          <div v-if="fileList!.length < 8">
+            <plus-outlined />
+            <div style="margin-top: 8px">Añadir</div>
+          </div>
+        </a-upload>
+        <a-modal :open="previewVisible" :title="previewTitle" :footer="null" @cancel="handleCancel">
+          <img alt="example" style="width: 100%" :src="previewImage" />
+        </a-modal>
+      </div>
+    </div>
+    <div class="dialog-footer">
+      <a-button type="primary" ghost class="mr-2" @click="onSubmit">Actualizar</a-button>
+      <a-button type="primary" ghost @click="$emit('closeDialog')">Cerrar</a-button>
+    </div>
+  </div>
 </template>
 
 <script lang="ts" setup>

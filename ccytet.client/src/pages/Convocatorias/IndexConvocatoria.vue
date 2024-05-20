@@ -5,7 +5,7 @@
     </v-dialog>
 
     <v-dialog fullscreen v-model="update">
-        
+        <ActualizarConvocatoria :id="selected" @close-dialog="update = false" @updated="index()"></ActualizarConvocatoria>
     </v-dialog>
 
     <div class="flex space-x-2">
@@ -43,9 +43,10 @@
                 </div>
                 <template #overlay>
                     <a-menu>
-                        <a-menu-item @click="openUpdate(item.idConvocatoria)">Editar</a-menu-item>
-                        <a-menu-item>Hacer visible</a-menu-item>
                         <a-menu-item @click="openDetails(item.idConvocatoria)">Ver en detalle</a-menu-item>
+                        <a-menu-item @click="openUpdate(item.idConvocatoria)">Editar</a-menu-item>
+                        <a-menu-item @click="toggleVisibility(item.idConvocatoria)" >{{ item.eliminado ? 'Hacer visible' : 'Hacer invisible' }}</a-menu-item>
+                        <a-menu-item @click="toggleStatus(item.idConvocatoria)">{{ item.abierto ? 'Cerrar convocatoria' : 'Abrir convocatoria' }}</a-menu-item>
                     </a-menu>
                 </template>
             </a-dropdown>
@@ -67,6 +68,8 @@ import { ConvocatoriasService } from '@/services/convocatorias-service';
 import { onMounted } from 'vue';
 import {CloseOutlined} from '@ant-design/icons-vue';
 import VerConvocatoria from './VerConvocatoria.vue';
+import ActualizarConvocatoria from './ActualizarConvocatoria.vue'
+import { notification } from 'ant-design-vue';
 
 /* INITIALIZATION */
 onMounted(() => {
@@ -161,6 +164,54 @@ const openUpdate = (id : string) => {
 const openDetails = (id : string) => {
     details.value = true
     selected.value = id
+}
+
+const toggleStatus = (id : string) => {
+    _convocatoriasService.toggleStatus(id)
+    .then(res => {
+        let data = res.data
+        if(data.session && data.action){
+            index()
+            notification.success({
+                message: 'Se actualizó el estatus de la convocatoria',
+            })
+        }else{
+            notification.error({
+                message: 'No se actualizó el estatus de la convocatoria',
+                description: data.message
+            })
+        }
+    })
+    .catch(error => {
+        notification.success({
+            message: 'Error de conexión al servidor',
+            description: error.message
+        })
+    })
+}
+
+const toggleVisibility = (id : string) => {
+    _convocatoriasService.toggleVisibility(id)
+    .then(res => {
+        let data = res.data
+        if(data.session && data.action){
+            index()
+            notification.success({
+                message: 'Se actualizó el estatus de la convocatoria',
+            })
+        }else{
+            notification.error({
+                message: 'No se actualizó el estatus de la convocatoria',
+                description: data.message
+            })
+        }
+    })
+    .catch(error => {
+        notification.success({
+            message: 'Error de conexión al servidor',
+            description: error.message
+        })
+    })
 }
 
 </script>

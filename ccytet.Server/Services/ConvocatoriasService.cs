@@ -1,8 +1,5 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Security.Claims;
-using System.Threading.Tasks;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using ccytet.Server.Data;
@@ -10,9 +7,7 @@ using ccytet.Server.Models;
 using ccytet.Server.ViewModels;
 using ccytet.Server.ViewModels.Req.Convocatorias;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Identity.Client;
 using Newtonsoft.Json;
-using OfficeOpenXml.FormulaParsing.ExpressionGraph.CompileStrategy;
 using Workcube.Libraries;
 
 namespace ccytet.Server.Services
@@ -140,7 +135,7 @@ namespace ccytet.Server.Services
         public IQueryable<ConvocatoriaViewModel> DataSourceExpression(dynamic data)
         {
             IQueryable<ConvocatoriaViewModel> query;
-            IQueryable<Convocatoria> rows = _context.Convocatorias.AsNoTracking().OrderByDescending(x => x.FechaCreacion).Where(x => !x.Eliminado);
+            IQueryable<Convocatoria> rows = _context.Convocatorias.AsNoTracking().OrderByDescending(x => x.FechaCreacion);
 
             if(!String.IsNullOrEmpty(data.dateFrom.Value))
             {
@@ -165,7 +160,108 @@ namespace ccytet.Server.Services
             query = rows.ProjectTo<ConvocatoriaViewModel>(_mapper.ConfigurationProvider);
             return query;
         }
-    
+
+        public async Task ToggleStatus(ClaimsPrincipal user, dynamic data)
+        {
+            var loginTransaction = await _context.Database.BeginTransactionAsync();
+
+            string id = Globals.GetClaim("Id", user);
+            string idConvocatoria = data.idConvocatoria;
+
+            AspNetUser objUser = await _context.AspNetUsers.FirstOrDefaultAsync(x => x.Id == id);
+            Convocatoria objConvocatoria = await _context.Convocatorias.FirstOrDefaultAsync(x => x.IdConvocatoria == idConvocatoria);
+
+            objConvocatoria.Abierto = !objConvocatoria.Abierto;
+
+            _context.Convocatorias.Update(objConvocatoria);
+            await _context.SaveChangesAsync();
+            await loginTransaction.CommitAsync();
+        }
+
+        public async Task ToggleVisibility(ClaimsPrincipal user, dynamic data)
+        {
+            var loginTransaction = await _context.Database.BeginTransactionAsync();
+
+            string id = Globals.GetClaim("Id", user);
+            string idConvocatoria = data.idConvocatoria;
+
+            AspNetUser objUser = await _context.AspNetUsers.FirstOrDefaultAsync(x => x.Id == id);
+            Convocatoria objConvocatoria = await _context.Convocatorias.FirstOrDefaultAsync(x => x.IdConvocatoria == idConvocatoria);
+
+            objConvocatoria.Eliminado = !objConvocatoria.Eliminado;
+
+            _context.Convocatorias.Update(objConvocatoria);
+            await _context.SaveChangesAsync();
+            await loginTransaction.CommitAsync();
+        }
+
+        public async Task Update(ClaimsPrincipal user, ActualizarConvocatoria.Root data)
+        {
+            var loginTransaction = await _context.Database.BeginTransactionAsync();
+
+            string id = Globals.GetClaim("Id", user);
+            AspNetUser objUser = await _context.AspNetUsers.AsNoTracking().FirstOrDefaultAsync(x => x.Id == id);
+            Convocatoria objConvocatoria = await _context.Convocatorias.AsNoTracking().FirstOrDefaultAsync(x => x.IdConvocatoria == data.idConvocatoria);
+
+            objConvocatoria.Titulo              = data.titulo;
+            objConvocatoria.Texto               = data.body;
+            objConvocatoria.FechaActualizacion  = DateTime.Now;
+            objConvocatoria.IdUserUpdater       = id;
+            objConvocatoria.UserUpdaterName     = String.Format("{0} {1}", objUser.Nombre, objUser.Apellidos);
+
+            if(!String.IsNullOrEmpty(data.portada))
+            {
+                //removemos la portada anterior
+                string previousPath = Path.Combine(objConvocatoria.PortadaPath);
+                if(File.Exists(previousPath)) { File.Delete(previousPath); }
+
+                //añadimos la nueva portada
+                string newPath = Path.Combine("Public", "Convocatorias", "Portadas", $"{Guid.NewGuid().ToString()}.png");
+                byte[] portadaBytes = Convert.FromBase64String(data.portada.Split(",")[1]);
+
+                using (FileStream stream = new FileStream(newPath, FileMode.Create))
+                {
+                    stream.Write(portadaBytes, 0, portadaBytes.Length);
+                    stream.Flush();
+                }
+
+                objConvocatoria.PortadaPath = newPath;
+            }
+
+            List<string> lstFiles = JsonConvert.DeserializeObject<List<string>>(objConvocatoria.FilesArray);
+
+            List<string> deletedFiles   = lstFiles.Where(x => !data.files.Select(x => x.name).Contains(x.Split("\\")[3])).ToList();
+            lstFiles                    = lstFiles.Where(x => data.files.Select(x => x.name).Contains(x.Split("\\")[3])).ToList();
+            
+            //Creación de archivos añadidos
+            data.files.ForEach(x => {
+                if(x.base64 != "exist")
+                {
+                    byte[] bytes = Convert.FromBase64String(x.base64.Split(',')[1]);
+                    string path = Path.Combine("Public", "Convocatorias", "Recursos", x.name);
+                    using(FileStream stream = new(path, FileMode.Create))
+                    {
+                        stream.Write(bytes, 0, bytes.Length);
+                        stream.Flush();
+                    }
+
+                    lstFiles.Add(path);
+                }
+            });
+
+            objConvocatoria.FilesArray = JsonConvert.SerializeObject(lstFiles);
+
+            //remover archivos eliminados
+            deletedFiles.ForEach(x => {
+                string path = Path.Combine(x);
+                if(File.Exists(path)){ File.Delete(path); }
+            });
+
+            _context.Convocatorias.Update(objConvocatoria);
+            await _context.SaveChangesAsync();
+            await loginTransaction.CommitAsync();
+        }
+
         public async Task<dynamic> Watch(dynamic data)
         {
             string id = data.id;
