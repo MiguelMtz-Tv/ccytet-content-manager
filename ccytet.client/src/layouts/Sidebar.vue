@@ -41,7 +41,6 @@
                 </a-tooltip>
             </template>
             <router-link to="/esf"><a-menu-item key="/esf">Ver Estados</a-menu-item></router-link>
-            <router-link to="/esf/crear"><a-menu-item key="/esf/crear">Crear Estado</a-menu-item></router-link>
           </a-sub-menu>
         </a-menu>
   </template>

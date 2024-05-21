@@ -1,6 +1,7 @@
 <template>
   <div class="mb-4 w-full flex justify-between items-center">
-    <div><span class="text-lg font-bold">Convocatoria</span> / <span class="text-blue-500">Crer convocatoria</span>
+    <div>
+      <span class="text-lg font-bold">Convocatoria</span> / <span class="text-blue-500">Crer convocatoria</span>
     </div>
     <div>
       <a-button type="primary" ghost @click="onsubmit">Publicar convocatoria</a-button>

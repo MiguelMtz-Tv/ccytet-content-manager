@@ -10,9 +10,7 @@ namespace ccytet.Server.Models
     {
         [Key]
         public string IdEstadoSituacionFinanciera                       { get; set; }
-        public DateTime Desde                                           { get; set; }
-        public DateTime Hasta                                           { get; set; }
-        public string Titulo                                            { get; set; }
+        public DateTime Periodo                                         { get; set; }
 
         //RELATIONS
         public virtual AspNetUser UserCreator                           { get; set; }
@@ -20,5 +18,7 @@ namespace ccytet.Server.Models
         
         public virtual AspNetUser UserUpdater                           { get; set; }
         public string IdUserUpdater                                     { get; set; }
+
+        public virtual List<EstadoSituacionFinancieraArchivo> EstadoSituacionFinancieraArchivos { get; set; }
     }
 }

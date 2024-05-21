@@ -172,6 +172,9 @@ namespace ccytet.Server.Services
             Convocatoria objConvocatoria = await _context.Convocatorias.FirstOrDefaultAsync(x => x.IdConvocatoria == idConvocatoria);
 
             objConvocatoria.Abierto = !objConvocatoria.Abierto;
+            objConvocatoria.IdUserUpdater = objUser.Id;
+            objConvocatoria.UserUpdaterName = String.Format("{0} {1}", objUser.Nombre, objUser.Apellidos);
+            objConvocatoria.FechaActualizacion = DateTime.Now;
 
             _context.Convocatorias.Update(objConvocatoria);
             await _context.SaveChangesAsync();
@@ -189,6 +192,9 @@ namespace ccytet.Server.Services
             Convocatoria objConvocatoria = await _context.Convocatorias.FirstOrDefaultAsync(x => x.IdConvocatoria == idConvocatoria);
 
             objConvocatoria.Eliminado = !objConvocatoria.Eliminado;
+            objConvocatoria.IdUserUpdater = objUser.Id;
+            objConvocatoria.UserUpdaterName = String.Format("{0} {1}", objUser.Nombre, objUser.Apellidos);
+            objConvocatoria.FechaActualizacion = DateTime.Now;
 
             _context.Convocatorias.Update(objConvocatoria);
             await _context.SaveChangesAsync();

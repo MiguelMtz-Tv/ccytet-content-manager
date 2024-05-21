@@ -22,4 +22,9 @@ export class NoticiasService {
         let varArgs = { id: id }
         return axios.post<any>(this.baseUrl + 'api/noticias/watch', varArgs, Sessions.header())
     }
+
+    public toggleVisibility(id : string){
+        let data = {idNoticia : id}
+        return axios.post<any>(this.baseUrl + 'api/noticias/toggleVisibility', data, Sessions.header())
+    }
 }

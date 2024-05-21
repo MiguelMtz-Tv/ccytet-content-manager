@@ -1,11 +1,12 @@
 <template>
-        <!-- Dialogs -->
+    <!-- Dialogs -->
     <v-dialog fullscreen v-model="details">
         <VerConvocatoria :id="selected" @close-dialog="details = false"></VerConvocatoria>
     </v-dialog>
 
     <v-dialog fullscreen v-model="update">
-        <ActualizarConvocatoria :id="selected" @close-dialog="update = false" @updated="index()"></ActualizarConvocatoria>
+        <ActualizarConvocatoria :id="selected" @close-dialog="update = false" @updated="index()">
+        </ActualizarConvocatoria>
     </v-dialog>
 
     <div class="flex space-x-2">
@@ -14,13 +15,15 @@
             <template #title>
                 <span>Filtrar desde</span>
             </template>
-            <input type="date" v-model="dateFrom" @change="index()" class="text-xs border rounded p-0.5 focus:outline-none">
+            <input type="date" v-model="dateFrom" @change="index()"
+                class="text-xs border rounded p-0.5 focus:outline-none">
         </a-tooltip>
         <a-tooltip>
             <template #title>
                 <span>Filtrar Hasta</span>
             </template>
-            <input type="date" v-model="dateTo" @change="index()" class="text-xs border rounded p-0.5 focus:outline-none">
+            <input type="date" v-model="dateTo" @change="index()"
+                class="text-xs border rounded p-0.5 focus:outline-none">
         </a-tooltip>
         <a-tooltip>
             <template #title>
@@ -31,13 +34,15 @@
             </button>
         </a-tooltip>
     </div>
-    <v-data-table-virtual fixed-header :loading="loading" :headers="headers" :items="items" :height="height" item-value="id">
+    <v-data-table-virtual fixed-header :loading="loading" :headers="headers" :items="items" :height="height"
+        item-value="id">
         <template v-slot:item.portada="{item}">
             <img class="h-8" :src="baseUrl+item.portadaPath" alt="">
         </template>
         <template v-slot:item.acciones="{item}">
             <a-dropdown :trigger="'click'">
-                <div class="border rounded flex items-center justify-center p-0.5 cursor-pointer hover:bg-gray-100" @click.prevent>
+                <div class="border rounded flex items-center justify-center p-0.5 cursor-pointer hover:bg-gray-100"
+                    @click.prevent>
                     <span class="mr-1 text-xs">Acciones</span>
                     <DownOutlined />
                 </div>
@@ -45,17 +50,30 @@
                     <a-menu>
                         <a-menu-item @click="openDetails(item.idConvocatoria)">Ver en detalle</a-menu-item>
                         <a-menu-item @click="openUpdate(item.idConvocatoria)">Editar</a-menu-item>
-                        <a-menu-item @click="toggleVisibility(item.idConvocatoria)" >{{ item.eliminado ? 'Hacer visible' : 'Hacer invisible' }}</a-menu-item>
+                        <a-menu-item @click="toggleVisibility(item.idConvocatoria)">{{ item.eliminado ? 'Hacer visible' : 'Hacer invisible' }}</a-menu-item>
                         <a-menu-item @click="toggleStatus(item.idConvocatoria)">{{ item.abierto ? 'Cerrar convocatoria' : 'Abrir convocatoria' }}</a-menu-item>
                     </a-menu>
                 </template>
             </a-dropdown>
         </template>
-        
-        <template v-slot:item.abierto="{item}">
-            <span :class="item.abierto ? 'breadcrum-green' : 'breadcrum-red'">
-                {{ item.abierto ? 'Abierta' : 'Cerrada' }}
-            </span>
+
+        <template v-slot:item.abierto="{ item }">
+            <table class="w-[130px]">
+                <tbody>
+                    <tr>
+                        <td class="p-1 border">
+                            <div :class="[item.abierto ? 'breadcrum-green' : 'breadcrum-red', 'm-auto text-center']">
+                                {{ item.abierto ? 'Abierta' : 'Cerrada' }}
+                            </div>
+                        </td>
+                        <td class="p-1 border">
+                            <div :class="[item.eliminado ? 'breadcrum-red' : 'breadcrum-green', 'm-auto text-center']">
+                                {{ item.eliminado ? 'Invisible' : 'Visible' }}
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
         </template>
     </v-data-table-virtual>
     <a-pagination v-model:current="page" @change="managePagination" :total="count" />

@@ -99,7 +99,8 @@ namespace ccytet.Server.Services
                     item.UserCreatorName,
                     item.UserUpdaterName,
                     item.Portada,
-                    item.Autor
+                    item.Autor,
+                    item.Eliminado
                 })
             );
 
@@ -118,7 +119,7 @@ namespace ccytet.Server.Services
         public IQueryable<NoticiaViewModel> DataSourceExpression(dynamic data)
         {
             IQueryable<NoticiaViewModel> query;
-            IQueryable<Noticia> rows = _context.Noticias.AsNoTracking().OrderByDescending(x => x.FechaCreacion).Where(x => !x.Eliminado);
+            IQueryable<Noticia> rows = _context.Noticias.AsNoTracking().OrderByDescending(x => x.FechaCreacion);
 
             if(!String.IsNullOrEmpty(data.dateFrom.Value))
             {
@@ -223,13 +224,20 @@ namespace ccytet.Server.Services
             return noticia;
         }
 
-        public async Task ToggleStatus(dynamic data)
+        public async Task ToggleVisibility(ClaimsPrincipal user, dynamic data)
         {
             var loginTransaction = await _context.Database.BeginTransactionAsync();
 
-            string id = data.id;
+            string id = data.idNoticia;
+            string  idAspNetUser = Globals.GetClaim("Id", user);
+
+            AspNetUser objUser = await _context.AspNetUsers.FirstOrDefaultAsync(x => x.Id == idAspNetUser);
             Noticia noticia= await _context.Noticias.Where(x => x.IdNoticia == id).FirstOrDefaultAsync();
+            
             noticia.Eliminado = !noticia.Eliminado;
+            noticia.IdUserUpdater = objUser.Id;
+            noticia.UserUpdaterName = String.Format("{0} {1}", objUser.Nombre, objUser.Apellidos);
+            noticia.FechaActualizacion = DateTime.Now;
 
             _context.Noticias.Update(noticia);
             await _context.SaveChangesAsync();

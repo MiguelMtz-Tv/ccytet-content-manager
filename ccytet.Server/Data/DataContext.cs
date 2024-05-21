@@ -23,6 +23,8 @@ namespace ccytet.Server.Data
             //RELACION DE USUARIO CON ESF
             builder.Entity<EstadoSituacionFinanciera>().HasOne(esf => esf.UserCreator).WithMany(uc => uc.ESFCreados).HasForeignKey(esf => esf.IdUserCreator).OnDelete(DeleteBehavior.Restrict);
             builder.Entity<EstadoSituacionFinanciera>().HasOne(esf => esf.UserUpdater).WithMany(uu => uu.ESFActualizados).HasForeignKey(esf => esf.IdUserUpdater).OnDelete(DeleteBehavior.Restrict);
+
+            builder.Entity<EstadoSituacionFinancieraArchivo>().HasOne(x => x.EstadoSituacionFinanciera).WithMany(x => x.EstadoSituacionFinancieraArchivos).HasForeignKey(x => x.IdEstadoSituacionFinanciera).OnDelete(DeleteBehavior.Restrict); 
         }
 
         //A
@@ -31,6 +33,7 @@ namespace ccytet.Server.Data
         public DbSet<Convocatoria> Convocatorias                                            { get; set; }
         //E
         public DbSet<EstadoSituacionFinanciera> EstadosSituacionFinanciera                  { get; set; }
+        public DbSet<EstadoSituacionFinancieraArchivo> EstadoSituacionFinancieraArchivos    { get; set; }
         //N
         public DbSet<Noticia> Noticias                                                      { get; set; }
     }

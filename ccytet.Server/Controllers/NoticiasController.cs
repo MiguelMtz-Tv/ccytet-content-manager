@@ -84,6 +84,28 @@ namespace ccytet.Server.Controllers
         }
 
         [Authorize(AuthenticationSchemes = "Bearer")]
+        [HttpPost("ToggleVisibility")]
+        public async Task<ActionResult<dynamic>> ToggleVisibility([FromBody] JsonObject data)
+        {
+            JsonReturn objReturn = new();
+            try
+            {
+                await _noticiasService.ToggleVisibility(User, Globals.JsonData(data));
+                objReturn.Success(SuccessMessage.REQUEST);
+            }
+            catch(AppException ex)
+            {
+                objReturn.Exception(ex);
+            }
+            catch(Exception ex)
+            {
+                objReturn.Exception(ExceptionMessage.RawException(ex));
+            }
+
+            return objReturn.build();
+        }
+
+        [Authorize(AuthenticationSchemes = "Bearer")]
         [HttpPost("watch")]
         public async Task<ActionResult<dynamic>> Watch([FromBody] JsonObject data)
         {

@@ -35,6 +35,10 @@
         <template v-slot:item.portada="{item}">
             <img class="h-8" :src="baseUrl+item.portada" alt="">
         </template>
+        <template v-slot:item.eliminado="{item}">
+            <span class="breadcrum-red" v-if="item.eliminado">Invisible</span>
+            <span class="breadcrum-green" v-else>Visible</span>
+        </template>
         <template v-slot:item.acciones="{item}">
             <a-dropdown :trigger="'click'">
                 <div class="border rounded flex items-center justify-center p-0.5 cursor-pointer hover:bg-gray-100" @click.prevent>
@@ -44,8 +48,8 @@
                 <template #overlay>
                     <a-menu>
                         <a-menu-item @click="openUpdate(item.idNoticia)">Editar</a-menu-item>
-                        <a-menu-item>Hacer visible</a-menu-item>
                         <a-menu-item @click="openDetails(item.idNoticia)">Ver en detalle</a-menu-item>
+                        <a-menu-item @click="toggleVisibility(item.idNoticia)">{{ item.eliminado ? 'Hacer visible' : 'Hacer invisible' }}</a-menu-item>
                     </a-menu>
                 </template>
             </a-dropdown>
@@ -63,6 +67,7 @@ import { DownOutlined } from '@ant-design/icons-vue';
 import VerNoticia from './VerNoticia.vue'
 import ActualizarNoticia from './ActualizarNoticia.vue';
 import {CloseOutlined} from '@ant-design/icons-vue';
+import { notification } from 'ant-design-vue';
 
 onMounted(() => {
     index()
@@ -97,9 +102,33 @@ const openDetails = (id : string) => {
     selectedNew.value = id
 }
 
-function openUpdate(id : string){
+const openUpdate = (id : string) => {
     update.value = true
     selectedNew.value = id
+}
+
+const toggleVisibility = (id : string) => {
+    _noticiasService.toggleVisibility(id)
+    .then((res) => {
+        let data = res.data
+        if(data.session && data.action){
+            index()
+            notification.success({
+                message: 'Se cambió el estatus de la noticia',
+            })
+        }else{
+            notification.error({
+                message: 'No se cambió el estatus de la noticia',
+                description: data.message
+            })
+        }
+    })
+    .catch(error => {
+        notification.error({
+                message: 'Error de conexión',
+                description: error.message
+            })
+    })
 }
 
 const baseUrl = Server.baseUrl
@@ -145,6 +174,7 @@ const headers : Array<any> = [
     {title: '',                     align: 'start',     key: 'portada'},
     {title: 'Acciones',             align: 'start',     key: 'acciones'},
     {title: 'Titulo',               align: 'start',     key: 'titulo'},
+    {title: 'Estatus',              align: 'start',     key: 'eliminado'},
     {title: 'Autor',                align: 'start',     key: 'autor'},
     {title: 'Fecha de creación',    align: 'start',     key: 'fechaCreacion'},
     {title: 'Creado por',           align: 'start',     key: 'userCreatorName'},
