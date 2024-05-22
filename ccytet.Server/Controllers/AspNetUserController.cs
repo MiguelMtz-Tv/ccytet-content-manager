@@ -60,5 +60,11 @@ namespace ccytet.Server.Controllers
             await _aspNetUserService.Create(Globals.JsonData(data));
         }
 
+        [HttpGet("status")]
+        public ActionResult Status()
+        {
+            return Ok("Everything is ok!");
+        }
+
     }
 }

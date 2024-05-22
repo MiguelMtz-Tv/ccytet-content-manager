@@ -55,9 +55,6 @@ const showData = () => {
     matricula: matricula.value,
     password: password.value
   })
-  .catch((reason : any) => {
-    return reason.response
-  })
   .then(
     (res : AxiosResponse) => {
       signInLoading.value = false
@@ -72,6 +69,13 @@ const showData = () => {
       }
     }
   )
+  .catch(error => {
+    signInLoading.value = false
+    notification.error({
+      message:'Error',
+      description: error.message
+    })
+  })
 }
 
 </script>
