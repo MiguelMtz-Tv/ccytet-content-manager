@@ -25,7 +25,7 @@
                 </template>
             </a-tree>
         </div>
-        <iframe class="border p-2 rounded bg-gray-100" src="http://localhost:5177/public/convocatorias/recursos/9d3c_Recibo MARZO 2024.pdf" width="100%"
+        <iframe class="border p-2 rounded bg-gray-100" src="http://localhost:5177/file.pdf" width="100%"
             :height="height+'px'">
             Este navegador no soporta iframes.
         </iframe>
@@ -35,7 +35,16 @@
 import { ref, type Ref } from 'vue';
 import type { TreeProps } from 'ant-design-vue';
 import type { Dayjs } from 'dayjs';
+import { EsfService } from '@/services/esf-service';
 
+/*
+* SERVICES
+*/
+let esfService: EsfService = new EsfService()
+
+/*
+* INITIALIZATION
+*/
 let create: Ref<boolean> = ref<boolean>(false)
 let date: Ref<Dayjs | undefined> = ref<Dayjs>()
 
@@ -74,6 +83,9 @@ const treeData = ref<TreeProps['treeData']>([
   },
 ]);
 
+/*
+* METHODS
+*/
 const onSelect: TreeProps['onSelect'] = (selectedKeys, info) => {
   console.log(selectedKeys);
   console.log(info)
@@ -88,7 +100,9 @@ const logDate = () => {
   let year: number = date.value!.year()
   let month: number = (date.value?.month())!
 
-  console.log('fecha ' + new Date(year, month, 1))
+  let periodDate: Date = new Date(year, month, 1)
+
+  
 }
 </script>
 
