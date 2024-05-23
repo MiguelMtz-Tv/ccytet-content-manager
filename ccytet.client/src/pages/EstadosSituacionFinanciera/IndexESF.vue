@@ -3,10 +3,10 @@
       <span class="text-lg font-bold">Estados de situación financiera</span>
     </div>
     <div class="flex">
-        <div class="max-w-[300px] min-w-[220px] border mr-2">
+        <div class="max-w-[300px] min-w-[220px] border mr-2 overflow-auto">
             <div class="p-1 mb-3 mx-auto w-fit flex space-x-2">
               <a-date-picker picker="month" v-model:value="date"/>
-              <button class="btn-basic text-sm" @click="logDate">Añadir</button>
+              <button class="btn-basic text-sm" @click="btnCreate()">Añadir</button>
             </div>
             <a-tree :show-line="showLine" :show-icon="showIcon" :tree-data="treeData" @select="onSelect">
                 <template #title="{ dataRef }">
@@ -32,15 +32,15 @@
     </div>
 </template>
 <script lang="ts" setup>
-import { ref, type Ref } from 'vue';
-import type { TreeProps } from 'ant-design-vue';
+import { ref, type Ref, onMounted  } from 'vue';
+import { notification, type TreeProps } from 'ant-design-vue';
 import type { Dayjs } from 'dayjs';
 import { EsfService } from '@/services/esf-service';
 
 /*
 * SERVICES
 */
-let esfService: EsfService = new EsfService()
+let _esfService: EsfService = new EsfService()
 
 /*
 * INITIALIZATION
@@ -50,42 +50,33 @@ let date: Ref<Dayjs | undefined> = ref<Dayjs>()
 
 const showLine = ref<boolean>(true);
 const showIcon = ref<boolean>(false);
-const treeData = ref<TreeProps['treeData']>([
-  {
-    level: 0,
-    title: 'parent 1',
-    key: '0-0',
-    children: [
-      {
-        title: 'parent 1-0',
-        key: '0-0-0',
-      },
-      {
-        title: 'parent 1-1',
-        key: '0-0-1',
-      },
-      {
-        title: 'parent 1-2',
-        key: '0-0-2',
-      },
-    ],
-  },
-  {
-    level: 0,
-    title: 'parent 2',
-    key: '0-1',
-    children: [
-      {
-        title: 'parent 2-0',
-        key: '0-1-0',
-      },
-    ],
-  },
-]);
+let treeData = ref<TreeProps['treeData']>([]);
 
 /*
 * METHODS
 */
+onMounted(() => {
+  index()
+})
+
+const index = () => {
+  let year: number = 2024
+
+  _esfService.index(year)
+  .then(res => {
+    let data = res.data
+    if(data.session &&  data.action){
+      treeData.value = data.result
+    }else{
+      notification.error({
+        message: 'No fue posible cargar los datos',
+        description: data.message
+      })
+    }
+  }
+  )
+}
+
 const onSelect: TreeProps['onSelect'] = (selectedKeys, info) => {
   console.log(selectedKeys);
   console.log(info)
@@ -96,13 +87,33 @@ window.addEventListener('resize', () => {
     height.value = window.innerHeight - 100
 })
 
-const logDate = () => {
+const btnCreate = () => {
   let year: number = date.value!.year()
   let month: number = (date.value?.month())!
-
   let periodDate: Date = new Date(year, month, 1)
 
-  
+  _esfService.create(periodDate)
+  .then(res => {
+    let data = res.data
+    if(data.session && data.action){
+      index()
+      notification.success({
+        message: 'Periodo creado'
+      }
+      )
+    }else{
+      notification.error({
+        message: 'No se creó el periodo',
+        description: data.message
+      })
+    }
+  })
+  .catch(error => {
+    notification.error({
+      message: 'Error de conexión',
+      description: error.message
+    })
+  })
 }
 </script>
 

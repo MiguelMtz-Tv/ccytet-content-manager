@@ -25,6 +25,13 @@ namespace ccytet.Server.Migrations
                 table: "EstadosSituacionFinanciera",
                 newName: "Periodo");
 
+            migrationBuilder.AddColumn<bool>(
+                name: "Eliminado",
+                table: "EstadosSituacionFinanciera",
+                type: "bit",
+                nullable: false,
+                defaultValue: false);
+
             migrationBuilder.AddColumn<string>(
                 name: "UserCreatorName",
                 table: "EstadosSituacionFinanciera",
@@ -89,6 +96,10 @@ namespace ccytet.Server.Migrations
         {
             migrationBuilder.DropTable(
                 name: "EstadoSituacionFinancieraArchivos");
+
+            migrationBuilder.DropColumn(
+                name: "Eliminado",
+                table: "EstadosSituacionFinanciera");
 
             migrationBuilder.DropColumn(
                 name: "UserCreatorName",

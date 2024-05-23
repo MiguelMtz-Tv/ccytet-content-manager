@@ -60,6 +60,7 @@ builder.Services.AddSingleton<JwtHandler>();
 builder.Services.AddScoped<AspNetUserService, AspNetUserService>();
 builder.Services.AddScoped<NoticiasService, NoticiasService>();
 builder.Services.AddScoped<ConvocatoriasService, ConvocatoriasService>();
+builder.Services.AddScoped<EstadosSituacionFinancierosService, EstadosSituacionFinancierosService>();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();

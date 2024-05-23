@@ -12,7 +12,7 @@ using ccytet.Server.Data;
 namespace ccytet.Server.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20240522221941_04")]
+    [Migration("20240523021839_04")]
     partial class _04
     {
         /// <inheritdoc />
@@ -288,6 +288,9 @@ namespace ccytet.Server.Migrations
                 {
                     b.Property<string>("IdEstadoSituacionFinanciera")
                         .HasColumnType("nvarchar(450)");
+
+                    b.Property<bool>("Eliminado")
+                        .HasColumnType("bit");
 
                     b.Property<string>("IdUserCreator")
                         .HasColumnType("nvarchar(450)");

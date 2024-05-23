@@ -7,6 +7,11 @@ export class EsfService{
 
     create(period : Date){
         let data: any = {periodo: period}
-        return axios.post<any>(this.baseUrl + 'api/estadossituacionfinanciera/create', data)
+        return axios.post<any>(this.baseUrl + 'api/estadossituacionfinanciera/create', data, Sessions.header())
+    }
+
+    index(year : number){
+        let data: any = {year: year}
+        return axios.post<any>(this.baseUrl + 'api/estadossituacionfinanciera/index', data, Sessions.header())
     }
 }

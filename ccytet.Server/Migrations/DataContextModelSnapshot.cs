@@ -286,6 +286,9 @@ namespace ccytet.Server.Migrations
                     b.Property<string>("IdEstadoSituacionFinanciera")
                         .HasColumnType("nvarchar(450)");
 
+                    b.Property<bool>("Eliminado")
+                        .HasColumnType("bit");
+
                     b.Property<string>("IdUserCreator")
                         .HasColumnType("nvarchar(450)");
 
