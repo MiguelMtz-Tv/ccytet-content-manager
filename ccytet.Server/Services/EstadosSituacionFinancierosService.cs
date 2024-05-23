@@ -77,25 +77,25 @@ namespace ccytet.Server.Services
         {
             int year = data.year;
             string[] meses = { "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre" };
-            
+
             return await _context.EstadosSituacionFinanciera
             .Include(x => x.EstadoSituacionFinancieraArchivos)
             .Where(x => x.Periodo.Year == year && !x.Eliminado)
             .OrderBy(x => x.Periodo.Month)
             .Select(x => new ESFNode {
                 Level = 0,
+                Id = x.IdEstadoSituacionFinanciera,
                 Title = meses[x.Periodo.Month - 1],
                 Key = x.Periodo.ToString("G"),
                 Children = x.EstadoSituacionFinancieraArchivos.Where(x => !x.Deleted).Select(x => new ESFNode
                 {
                     Level = 1,
+                    Id = x.IdEstadoSituacionFinancieraArchivo,
                     Title = x.Titulo,
                     Key = x.Path,
                     Children = null
                 }).ToList()
             }).ToListAsync();
-
-            
         }
 
         public async Task AddFiles(ClaimsPrincipal user, ReqAddFiles data)
@@ -105,7 +105,7 @@ namespace ccytet.Server.Services
 
             AspNetUser objUser = await _context.AspNetUsers.AsNoTracking().FirstOrDefaultAsync(x => x.Id == id);
             EstadoSituacionFinanciera objESF = await _context.EstadosSituacionFinanciera.AsNoTracking().FirstOrDefaultAsync(x => x.IdEstadoSituacionFinanciera == data.idEstadoSituacionFinanciera); 
-            
+
             List<EstadoSituacionFinancieraArchivo> lstAddedFiles =new();
             try
             {
@@ -120,7 +120,7 @@ namespace ccytet.Server.Services
                         stream.Write(bytes, 0, bytes.Length);
                         stream.Flush();
                     }
-                    
+
                     lstAddedFiles.Add(new(){
                         IdEstadoSituacionFinancieraArchivo  = Guid.NewGuid().ToString(),
                         Titulo                              = fileName,
@@ -147,7 +147,6 @@ namespace ccytet.Server.Services
 
                 throw new ArgumentException("Error al crear archivos: " + ex.Message);
             }
-            
         }
 
     }

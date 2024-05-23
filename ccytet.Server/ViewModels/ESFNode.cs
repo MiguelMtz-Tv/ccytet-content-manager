@@ -8,6 +8,7 @@ namespace ccytet.Server.ViewModels
     public class ESFNode
     {
         public int Level { get; set; }
+        public string Id { get; set; }
         public string Title { get; set; }
         public string Key { get; set; }
         public List<ESFNode> Children {get; set;}

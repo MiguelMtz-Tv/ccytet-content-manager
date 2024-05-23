@@ -4,7 +4,6 @@ import CrearNoticia from './pages/Noticias/CrearNoticia.vue'
 import IndexConvocatoria from './pages/Convocatorias/IndexConvocatoria.vue'
 import CrearConvocatoria from './pages/Convocatorias/CrearConvocatoria.vue'
 import IndexESF from './pages/EstadosSituacionFinanciera/IndexESF.vue'
-import CrearESF from './pages/EstadosSituacionFinanciera/CrearESF.vue'
 import SignIn from './pages/auth/SignIn.vue'
 import SignUp from './pages/auth/SignUp.vue'
 import { createRouter, createWebHistory } from 'vue-router'
@@ -16,7 +15,7 @@ const router = createRouter({
     //Auth
     { path: '/sign-in',               component:  SignIn, meta: { auth: false }},
     { path: '/sign-up',               component:  SignUp, meta: { auth: false }},
-    
+
     //Inicio
     { path: '/',                      component:  HelloWorld, meta: { auth: true }},
 
@@ -30,7 +29,6 @@ const router = createRouter({
 
     //Estados de situación financiera
     { path: '/esf',                   component:  IndexESF, meta: { auth: true } },
-    { path: '/esf/crear',             component:  CrearESF, meta: { auth: true } },
   ]
 })
 

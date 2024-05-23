@@ -2,12 +2,12 @@
     <div class="dialog">
         <div class="dialog-header">
             <div>
-                <span class="text-lg font-bold">Estados de situación financiera</span> / <span class="text-blue-500">Crear estado de situación financiera</span>
+                <span class="text-lg font-bold">Estados de situación financiera</span> / <span class="text-blue-500">{{ periodo }}</span>
             </div>
         </div>
         <div class="dialog-body">
             <div>
-                <a-date-picker picker="month" />
+                <input type="file" multiple accept="application/pdf">
             </div>
         </div>
         <div class="dialog-footer">
@@ -21,9 +21,10 @@
 import { onUnmounted } from 'vue';
 
 const emits = defineEmits(['close-dialog'])
+const props = defineProps(['id', 'periodo'])
 
 onUnmounted(() => {
-    emits('close-dialog')
+    console.log(props.id)
 })
 
 </script>
