@@ -1,17 +1,17 @@
 <template>
     <v-dialog v-model="addFiles" width="500px">
-      <AddFileESF :id="selectedPeriodo.id" :periodo="selectedPeriodo.name" @close-dialog="addFiles = false"></AddFileESF>
+      <AddFileESF :id="selectedPeriodo.id" :periodo="selectedPeriodo.name" @close-dialog="addFiles = false; onDialogClose($event)"></AddFileESF>
     </v-dialog>
     <div class="mb-2">
       <span class="text-lg font-bold">Estados de situación financiera</span>
     </div>
     <div class="flex">
-        <div class="max-w-[300px] min-w-[220px] border mr-2 overflow-auto">
+        <div class="w-[300px] min-w-[220px] border mr-2 overflow-auto">
             <div class="p-1 mb-3 mx-auto w-fit flex space-x-2">
               <a-date-picker picker="month" v-model:value="date"/>
               <button class="btn-basic text-sm" @click="btnCreate()">Añadir</button>
             </div>
-            <a-tree show-icon :tree-data="treeData">
+            <a-tree show-icon :tree-data="treeData" @select="onSelect">
               <template #icon="{ dataRef }">
                 <template v-if="dataRef.level === 0 && dataRef.children.length === 0">
                   <div class="relative">
@@ -20,7 +20,7 @@
                 </template>
               </template>
               <template #title="{ dataRef }">
-                  <a-dropdown :trigger="['click']">
+                  <a-dropdown :trigger="['click']" v-if="dataRef.level === 0">
                     <a @click.prevent>
                       {{ dataRef.title }}
                     </a>
@@ -35,10 +35,13 @@
                       </a-menu>
                     </template>
                   </a-dropdown>
+                  <template v-else>
+                    {{ dataRef.title }}
+                  </template>
               </template>
             </a-tree>
         </div>
-        <iframe class="border p-2 rounded bg-gray-100" src="http://localhost:5177/file.pdf" width="100%"
+        <iframe class="border p-2 rounded bg-gray-100" :src="baseUrl+selectedPath" width="100%"
             :height="height+'px'">
             Este navegador no soporta iframes.
         </iframe>
@@ -51,6 +54,7 @@ import type { Dayjs } from 'dayjs';
 import { EsfService } from '@/services/esf-service';
 import { FolderOutlined } from '@ant-design/icons-vue';
 import AddFileESF from './AddFileESF.vue';
+import { Server } from '@/libraries/servers';
 
 /*
 * SERVICES
@@ -67,6 +71,9 @@ let date: Ref<Dayjs | undefined> = ref<Dayjs>()
 const showLine = ref<boolean>(true);;
 let treeData = ref<TreeProps['treeData']>([]);
 let meses: Array<string> = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre']
+
+let selectedPath: Ref<string> = ref('file.pdf')
+let baseUrl: string = Server.baseUrl
 
 /*
 * METHODS
@@ -136,5 +143,18 @@ const openAddFiles = (id : string, key: string) =>{
 
   addFiles.value = true
 }
+
+const onDialogClose = (e : boolean) => {
+  if(e){
+    index()
+  }
+}
+
+const onSelect: TreeProps['onSelect'] = (selectedKeys, info) => {
+  if(info.node.level === 1){
+    console.log(info.node.key);
+    selectedPath.value = String(info.node.key);
+  }
+};
 </script>
 

@@ -38,10 +38,9 @@
           <img alt="example" style="width: 100%" :src="previewImage" />
         </a-modal>
     </div>
-    
   </a-spin>
 </template>
-  
+
 
 <script setup lang="ts">
   import { type Ref,  } from 'vue'
@@ -49,8 +48,8 @@
   import { PlusOutlined } from '@ant-design/icons-vue';
   import { ref } from 'vue';
   import type { UploadProps } from 'ant-design-vue';
+  import { notification, Upload } from 'ant-design-vue';
   import { NoticiasService } from '@/services/noticias-service';
-  import { Upload, notification } from 'ant-design-vue';
   import type { AxiosResponse } from 'axios';
   import router from '@/routing';
 

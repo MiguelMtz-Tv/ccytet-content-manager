@@ -10,7 +10,7 @@ namespace ccytet.Server.ViewModels.Req.ESF
         public string idEstadoSituacionFinanciera { get; set; }
         public List<File> files { get; set; }
 
-        public class File 
+        public class File
         {
             public string name { get; set; }
             public string base64 { get; set; }

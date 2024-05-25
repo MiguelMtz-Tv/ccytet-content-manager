@@ -40,14 +40,14 @@
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic'
 import { ref, type Ref } from 'vue';
 import { InboxOutlined } from '@ant-design/icons-vue';
-import { ConvocatoriasService } from '@/services/convocatorias-service.ts'
+import { ConvocatoriasService } from '@/services/convocatorias-service'
 import { CustomNotification }  from '@/services/custom-notification-service'
 import Utils from '@/libraries/utils';
 import router from '@/routing';
 import { notification } from 'ant-design-vue';
 import type { AxiosResponse } from 'axios';
 
-/* 
+/*
 *-----------------------------
 | Elementos del DOM
 *-----------------------------
@@ -55,7 +55,7 @@ import type { AxiosResponse } from 'axios';
 
 const portadaInput  : Ref<any>                            = ref(null)
 
-/* 
+/*
 *----------------------------
 | Inicialización de variables
 *----------------------------
@@ -63,8 +63,8 @@ const portadaInput  : Ref<any>                            = ref(null)
 
 const _convocatoriasService: ConvocatoriasService = new ConvocatoriasService()
 
-const fileList      : Array<{uid:string, base64:string, name: string}>  = []; 
-let portada         : Ref<string>                         = ref('') 
+const fileList      : Array<{uid:string, base64:string, name: string}>  = [];
+let portada         : Ref<string>                         = ref('')
 let titulo          : Ref<string>                         = ref('')
 let body            : Ref<string>                         = ref('')
 
@@ -104,8 +104,8 @@ const onsubmit = () => {
       })
     }
 }
-  
-/* 
+
+/*
 *---------------------------------------------
 | Configuración de carga de archivos y editor
 *---------------------------------------------
@@ -116,7 +116,6 @@ const logFile = async (e : any) => {
 }
 
 const beforeUpload = async (e: any) => {
-  console.log(e)
   fileList.push({
     uid: e.uid,
     name: e.name,
@@ -133,7 +132,7 @@ const onRemove = (e : any) => {
 // Titulo
 const editor = ClassicEditor
 
-/* 
+/*
 *---------------------------------------------
 | Validación del formulario
 *---------------------------------------------

@@ -14,4 +14,13 @@ export class EsfService{
         let data: any = {year: year}
         return axios.post<any>(this.baseUrl + 'api/estadossituacionfinanciera/index', data, Sessions.header())
     }
+
+    addFiles(id: string, files: Array<any>){
+        let data: any = {
+            idEstadoSituacionFinanciera: id,
+            files: files
+        }
+        return axios.post<any>(this.baseUrl + 'api/estadossituacionfinanciera/addfiles', data, Sessions.header())
+    }
+
 }
