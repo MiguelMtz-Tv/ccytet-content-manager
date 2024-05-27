@@ -87,6 +87,28 @@ namespace ccytet.Server.Controllers
             return objReturn.build();
         }
 
+        [HttpPost("deleteFile")]
+        [Authorize(AuthenticationSchemes = "Bearer")]
+        public async Task<ActionResult<dynamic>> DeleteFile([FromBody] JsonObject data)
+        {
+            JsonReturn objReturn = new();
+            try
+            {
+                await _esfService.DeleteFile(User, Globals.JsonData(data));
+                objReturn.Success(SuccessMessage.REQUEST);
+            }
+            catch(AppException ex)
+            {
+                objReturn.Exception(ex);
+            }
+            catch(Exception ex)
+            {
+                objReturn.Exception(ExceptionMessage.RawException(ex));
+            }
+
+            return objReturn.build();
+        }
+
         [HttpPost("Index")]
         [Authorize(AuthenticationSchemes = "Bearer")]
         public async Task<ActionResult<dynamic>> Index([FromBody] JsonObject data)

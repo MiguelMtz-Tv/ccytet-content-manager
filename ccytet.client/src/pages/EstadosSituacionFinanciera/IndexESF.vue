@@ -6,12 +6,15 @@
       <span class="text-lg font-bold">Estados de situación financiera</span>
     </div>
     <div class="flex">
-        <div class="w-[300px] min-w-[220px] border mr-2 overflow-auto">
-            <div class="p-1 mb-3 mx-auto w-fit flex space-x-2">
-              <a-date-picker picker="month" v-model:value="date"/>
-              <button class="btn-basic text-sm" @click="btnCreate()">Añadir</button>
+        <div class="w-[300px] min-w-[220px] border mr-2 overflow-auto resize-x overflow-x-hidden">
+            <div class="p-1 mb-3 w-full flex space-x-2 border-b">
+              <a-date-picker picker="year" v-model:value="date" @change="index($event.year())"/>
+              <select class="text-xs text-center border rounded border-gray-200 px-2" v-model="selectedMonth">
+                <option v-for="(item, index) in meses" :value="index">{{ item }}</option>
+              </select>
+              <button class="btn-basic text-sm" @click="btnCreate()" :disabled="addingESF">Añadir</button>
             </div>
-            <a-tree show-icon :tree-data="treeData" @select="onSelect">
+            <a-tree :show-icon="false" :tree-data="treeData" @select="onSelect">
               <template #icon="{ dataRef }">
                 <template v-if="dataRef.level === 0 && dataRef.children.length === 0">
                   <div class="relative">
@@ -26,21 +29,31 @@
                     </a>
                     <template #overlay>
                       <a-menu>
-                        <a-menu-item key="0" @click="openAddFiles(dataRef.id, dataRef.key)">
+                        <a-menu-item @click="openAddFiles(dataRef.id, dataRef.key)">
                           <a>Añadir documento</a>
                         </a-menu-item>
-                        <a-menu-item key="1">
+                        <a-menu-item @click="btnDeleteESF(dataRef.id)">
                           <a>Eliminar</a>
                         </a-menu-item>
                       </a-menu>
                     </template>
                   </a-dropdown>
-                  <template v-else>
-                    {{ dataRef.title }}
-                  </template>
-              </template>
-            </a-tree>
-        </div>
+                  <a-dropdown :trigger="['click']" v-else>
+                    <a @click.prevent>
+                      {{ dataRef.title }}
+                    </a>
+                    <template #overlay>
+                      <a-menu class="max-w-[160px]">
+                        <a-menu-item @click="btnDeleteFile(dataRef.id)">
+                          <a>Eliminar documento</a>
+                        </a-menu-item>
+                      </a-menu>
+                    </template>
+                  </a-dropdown>
+                </template>
+              </a-tree>
+            </div>
+            <contextHolder/>
         <iframe class="border p-2 rounded bg-gray-100" :src="baseUrl+selectedPath" width="100%"
             :height="height+'px'">
             Este navegador no soporta iframes.
@@ -48,19 +61,21 @@
     </div>
 </template>
 <script lang="ts" setup>
-import { ref, type Ref, onMounted  } from 'vue';
+import { ref, type Ref, onMounted, h  } from 'vue';
 import { notification, type TreeProps } from 'ant-design-vue';
 import type { Dayjs } from 'dayjs';
 import { EsfService } from '@/services/esf-service';
-import { FolderOutlined } from '@ant-design/icons-vue';
+import { ExclamationCircleOutlined, FolderOutlined } from '@ant-design/icons-vue';
 import AddFileESF from './AddFileESF.vue';
 import { Server } from '@/libraries/servers';
+import { Modal } from 'ant-design-vue';
 
 /*
 * SERVICES
 */
 let _esfService: EsfService = new EsfService()
 let selectedPeriodo: Ref<{id: string, name: string}> = ref({id: '', name: ''})
+let [modal, contextHolder] = Modal.useModal()
 
 /*
 * INITIALIZATION
@@ -68,9 +83,12 @@ let selectedPeriodo: Ref<{id: string, name: string}> = ref({id: '', name: ''})
 let addFiles: Ref<boolean> = ref<boolean>(false)
 let date: Ref<Dayjs | undefined> = ref<Dayjs>()
 
+let addingESF: Ref<boolean> = ref<boolean>(false)
+
 const showLine = ref<boolean>(true);;
 let treeData = ref<TreeProps['treeData']>([]);
 let meses: Array<string> = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre']
+let selectedMonth: Ref<number> = ref(0)
 
 let selectedPath: Ref<string> = ref('file.pdf')
 let baseUrl: string = Server.baseUrl
@@ -79,11 +97,10 @@ let baseUrl: string = Server.baseUrl
 * METHODS
 */
 onMounted(() => {
-  index()
+  index(new Date().getFullYear())
 })
 
-const index = () => {
-  let year: number = 2024
+const index = (year : number) => {
 
   _esfService.index(year)
   .then(res => {
@@ -106,31 +123,35 @@ window.addEventListener('resize', () => {
 })
 
 const btnCreate = () => {
+  addingESF.value = true
+
   let year: number = date.value!.year()
-  let month: number = (date.value?.month())!
+  let month: number = selectedMonth.value
   let periodDate: Date = new Date(year, month, 1)
 
   _esfService.create(periodDate)
   .then(res => {
     let data = res.data
     if(data.session && data.action){
-      index()
+      index(year)
       notification.success({
         message: 'Periodo creado'
       }
-      )
+    )
     }else{
       notification.error({
         message: 'No se creó el periodo',
         description: data.message
       })
     }
+    addingESF.value = false
   })
   .catch(error => {
     notification.error({
       message: 'Error de conexión',
       description: error.message
     })
+    addingESF.value = false
   })
 }
 
@@ -144,17 +165,109 @@ const openAddFiles = (id : string, key: string) =>{
   addFiles.value = true
 }
 
-const onDialogClose = (e : boolean) => {
-  if(e){
-    index()
+const onDialogClose = (e : any) => {
+  if(e.created){
+    index(e.year)
   }
 }
 
 const onSelect: TreeProps['onSelect'] = (selectedKeys, info) => {
   if(info.node.level === 1){
-    console.log(info.node.key);
     selectedPath.value = String(info.node.key);
   }
 };
+
+const btnDeleteFile = (id : string) => {
+  showDeleteFileConfirm(id)
+}
+
+const showDeleteFileConfirm = (id : string) => {
+  modal.confirm({
+    title: '¿Estas seguro que deseas eliminar este archivo?',
+    icon: h(ExclamationCircleOutlined),
+    content: 'Esta acción quitará el archivo permanentemente de su lugar en la nube',
+    okText: 'Eliminar',
+    okType: 'danger',
+    cancelText: 'Cancelar',
+    onOk() {
+      deleteFile(id)
+    },
+    onCancel() {
+    },
+  });
+};
+
+const deleteFile = (id : string) => {
+  _esfService.deleteFile(id)
+  .then(res => {
+    let data = res.data
+    if(data.session && data.action){
+      try{
+        index(date.value!.year())
+      }catch{
+        index(new Date().getFullYear())
+      }
+      selectedPath.value = 'file.pdf'
+    }else{
+      notification.error({
+      message: 'No se pudo eliminar el archivo',
+      description: data.message
+    })
+    }
+  })
+  .catch(error => {
+    notification.error({
+      message: 'No se pudo eliminar el archivo',
+      description: error.message
+    })
+  }
+  )
+}
+
+const btnDeleteESF = (id : string) => {
+  showDeleteESFConfirm(id)
+}
+
+const showDeleteESFConfirm = (id : string) => {
+  modal.confirm({
+    title: '¿Estas seguro que deseas eliminar este indice estados financieros?',
+    icon: h(ExclamationCircleOutlined),
+    content: 'No podrás eliminarlo mientras este contenga archivos',
+    okText: 'Eliminar',
+    okType: 'danger',
+    cancelText: 'Cancelar',
+    onOk() {
+      deleteESF(id)
+    },
+    onCancel() {},
+  });
+}
+
+const deleteESF = (id : string) => {
+  _esfService.delete(id)
+  .then(res => {
+    let data = res.data
+    if(data.session && data.action){
+      try{
+        index(date.value!.year())
+      }catch{
+        index(new Date().getFullYear())
+      }
+      selectedPath.value = 'file.pdf'
+    }else{
+      notification.error({
+      message: 'No se pudo eliminar el indice',
+      description: data.message
+    })
+    }
+  })
+  .catch(error => {
+    notification.error({
+      message: 'No se pudo eliminar el indice',
+      description: error.message
+    })
+  }
+  )
+}
 </script>
 

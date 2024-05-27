@@ -16,7 +16,7 @@
         </div>
         <div class="dialog-footer">
             <a-button type="primary" ghost class="mr-2" @click="submit()">Crear</a-button>
-            <a-button type="primary" ghost @click="emits('close-dialog', false)">Cerrar</a-button>
+            <a-button type="primary" ghost @click="emits('close-dialog', {created: false, year: periodo.split(' ')[1]})">Cerrar</a-button>
         </div>
     </div>
 </template>
@@ -70,7 +70,7 @@ const submit = () => {
         .then(res => {
             let data = res.data
             if(data.session && data.action){
-                emits('close-dialog', true)
+                emits('close-dialog', {created: true, year: props.periodo.split(' ')[1]})
             }else{
                 showError('No fue posible añadir los archivos: ' + data.message)
             }

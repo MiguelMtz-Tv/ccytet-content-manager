@@ -23,4 +23,14 @@ export class EsfService{
         return axios.post<any>(this.baseUrl + 'api/estadossituacionfinanciera/addfiles', data, Sessions.header())
     }
 
+    delete(id : string){
+        let data: any = {id : id}
+        return axios.post<any>(this.baseUrl + 'api/estadossituacionfinanciera/delete', data, Sessions.header())
+    }
+
+    deleteFile(id: string){
+        let data: any = { id : id }
+        return axios.post<any>(this.baseUrl + 'api/estadossituacionfinanciera/deletefile', data, Sessions.header())
+    }
+
 }

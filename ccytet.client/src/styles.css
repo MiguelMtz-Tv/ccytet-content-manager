@@ -11,7 +11,11 @@
 }
 
 .btn-primary:disabled {
-    @apply !cursor-not-allowed !opacity-60 
+    @apply !cursor-not-allowed !opacity-60
+}
+
+.btn-basic:disabled {
+    @apply !cursor-not-allowed !opacity-60 hover:bg-slate-100 hover:text-black
 }
 
 /* Dialogs body structure */
