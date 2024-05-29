@@ -25,7 +25,9 @@
               <template #title="{ dataRef }">
                   <a-dropdown :trigger="['click']" v-if="dataRef.level === 0">
                     <a @click.prevent>
-                      {{ dataRef.title }}
+                      <div class="truncate">
+                        {{ dataRef.title }}
+                      </div>
                     </a>
                     <template #overlay>
                       <a-menu>
@@ -40,7 +42,9 @@
                   </a-dropdown>
                   <a-dropdown :trigger="['click']" v-else>
                     <a @click.prevent>
-                      {{ dataRef.title }}
+                      <div class="truncate">
+                        {{ dataRef.title }}
+                      </div>
                     </a>
                     <template #overlay>
                       <a-menu class="max-w-[160px]">
@@ -63,7 +67,7 @@
 <script lang="ts" setup>
 import { ref, type Ref, onMounted, h  } from 'vue';
 import { notification, type TreeProps } from 'ant-design-vue';
-import type { Dayjs } from 'dayjs';
+import dayjs, { Dayjs } from 'dayjs';
 import { EsfService } from '@/services/esf-service';
 import { ExclamationCircleOutlined, FolderOutlined } from '@ant-design/icons-vue';
 import AddFileESF from './AddFileESF.vue';
@@ -80,12 +84,13 @@ let [modal, contextHolder] = Modal.useModal()
 /*
 * INITIALIZATION
 */
+const currentYear: number = new Date().getFullYear() 
 let addFiles: Ref<boolean> = ref<boolean>(false)
-let date: Ref<Dayjs | undefined> = ref<Dayjs>()
+let date: Ref<Dayjs | undefined> = ref<Dayjs>(dayjs(`${currentYear}/01/01`))
 
 let addingESF: Ref<boolean> = ref<boolean>(false)
 
-const showLine = ref<boolean>(true);;
+const showLine = ref<boolean>(true);
 let treeData = ref<TreeProps['treeData']>([]);
 let meses: Array<string> = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre']
 let selectedMonth: Ref<number> = ref(0)
@@ -101,7 +106,6 @@ onMounted(() => {
 })
 
 const index = (year : number) => {
-
   _esfService.index(year)
   .then(res => {
     let data = res.data
