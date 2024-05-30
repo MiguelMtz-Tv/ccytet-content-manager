@@ -10,8 +10,8 @@
 
                 <div class="border-y p-2 flex w-full justify-between mt-2">
                     <div>
-                        <span :class="convocatoria.abierta ? 'breadcrum-green' : 'breadcrum-red'">
-                            {{ convocatoria.abierta ? 'Convocatoria abierta' : 'Convocatoria cerrada' }}
+                        <span :class="convocatoria.abierto ? 'breadcrum-green' : 'breadcrum-red'">
+                            {{ convocatoria.abierto ? 'Convocatoria abierta' : 'Convocatoria cerrada' }}
                         </span>
                     </div>
                     <div>

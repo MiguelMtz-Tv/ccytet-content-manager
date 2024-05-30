@@ -287,6 +287,6 @@ namespace ccytet.Server.Services
                 FilesArray = JsonConvert.DeserializeObject<List<string>>(x.FilesArray)
             })
             .FirstOrDefaultAsync();
-        } 
+        }
     }
 }
