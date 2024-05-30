@@ -23,7 +23,7 @@
                 </template>
               </template>
               <template #title="{ dataRef }">
-                  <a-dropdown :trigger="['click']" v-if="dataRef.level === 0">
+                  <a-dropdown :trigger="['contextmenu']" v-if="dataRef.level === 0">
                     <a @click.prevent>
                       <div class="truncate">
                         {{ dataRef.title }}
@@ -40,7 +40,7 @@
                       </a-menu>
                     </template>
                   </a-dropdown>
-                  <a-dropdown :trigger="['click']" v-else>
+                  <a-dropdown :trigger="['contextmenu']" v-else>
                     <a @click.prevent>
                       <div class="truncate">
                         {{ dataRef.title }}
